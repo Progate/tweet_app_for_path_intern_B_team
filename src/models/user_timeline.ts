@@ -3,10 +3,11 @@ import {
   getUserWithPostsIncludeRetweet,
   UserWithoutPassword,
   getUserLikedPosts,
+  getUserfollowedPosts,
 } from "./user";
 import {getAllRetweetedPosts} from "./retweet";
 
-type TweetType = "tweet" | "retweet" | "like";
+type TweetType = "tweet" | "retweet" | "like" | "follow";
 
 type Timeline = {
   type: TweetType;
@@ -94,6 +95,25 @@ export const getUserLikesTimeline = async (
       post: like.post,
       user: user,
       activedAt: like.post.createdAt,
+    };
+  });
+
+  return {
+    user,
+    timeline,
+  };
+};
+export const getUserFollowsTimeline = async (
+  userId: number
+): Promise<UserTimeline | null> => {
+  const user = await getUserLikedPosts(userId);
+  if (user === null) return null;
+  const timeline: Timeline[] = user.follows.map((follow): Timeline => {
+    return {
+      type: "follow",
+      post: follow.post,
+      user: user,
+      activedAt: follow.post.createdAt,
     };
   });
 

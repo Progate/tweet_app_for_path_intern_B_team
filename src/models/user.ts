@@ -149,6 +149,50 @@ export const getUserLikedPosts = async (
   });
   return user;
 };
+export const getUserfollowedPosts = async (
+  userId: number
+): Promise<
+  | (UserWithoutPassword & {
+      follows: Array<{
+        post: PostWithUser;
+      }>;
+    })
+  | null
+> => {
+  const prisma = databaseManager.getInstance();
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      ...selectUserColumnsWithoutPassword,
+      follows: {
+        orderBy: {
+          post: {
+            createdAt: "desc",
+          },
+        },
+        select: {
+          post: {
+            select: {
+              id: true,
+              content: true,
+              userId: true,
+              createdAt: true,
+              updatedAt: true,
+              user: {
+                select: {
+                  ...selectUserColumnsWithoutPassword,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  return user;
+};
 
 export const getAllUsers = async (): Promise<UserWithoutPassword[]> => {
   const prisma = databaseManager.getInstance();
