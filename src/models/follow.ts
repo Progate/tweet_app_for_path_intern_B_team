@@ -1,7 +1,7 @@
 import {Follow} from "@prisma/client";
 import {databaseManager} from "@/db/index";
 
-type FollowData = Pick<Follow, "followerId" | "followeeId">;
+// type FollowData = Pick<Follow, "followerId" | "followeeId">;
 
 /**
  * 
