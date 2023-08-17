@@ -4,11 +4,11 @@ import {databaseManager} from "@/db/index";
 // type FollowData = Pick<Follow, "followerId" | "followeeId">;
 
 /**
- * 
- * @param userId 
+ *
+ * @param userId
  * @returns count of user's follow
  */
-export const getUserFollowCount= async (userId: number): Promise<number> => {
+export const getUserFollowCount = async (userId: number): Promise<number> => {
   const prisma = databaseManager.getInstance();
   const count = await prisma.follow.count({
     where: {
@@ -19,12 +19,12 @@ export const getUserFollowCount= async (userId: number): Promise<number> => {
 };
 
 /**
- * 
- * @param userId 
+ *
+ * @param userId
  * @returns count of user's follower
  */
 
-export const getUserFollowerCount= async (userId: number): Promise<number> => {
+export const getUserFollowerCount = async (userId: number): Promise<number> => {
   const prisma = databaseManager.getInstance();
   const count = await prisma.follow.count({
     where: {
@@ -35,21 +35,21 @@ export const getUserFollowerCount= async (userId: number): Promise<number> => {
 };
 
 /**
- * 
- * @param followerId 
- * @param followeeId 
- * @returns 
+ *
+ * @param followerId
+ * @param followeeId
+ * @returns
  */
 export const createFollow = async (
-  followerId: number, 
+  followerId: number,
   followeeId: number
-  ): Promise<Follow> => {
-    const prisma = databaseManager.getInstance();
-    const follow = await prisma.follow.create({
-      data: {
-        followerId,
-        followeeId
-      },
-    });
-    return follow;
-  }
+): Promise<Follow> => {
+  const prisma = databaseManager.getInstance();
+  const follow = await prisma.follow.create({
+    data: {
+      followerId,
+      followeeId,
+    },
+  });
+  return follow;
+};

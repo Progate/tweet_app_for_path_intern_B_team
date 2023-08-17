@@ -4,7 +4,6 @@ import {getUserFollowCount, createFollow} from "@/models/follow";
 
 export const followRouter = express.Router();
 
-
 // followの数を取得するAPI (不必要)
 followRouter.get("/:userId", async (req, res) => {
   const {userId} = req.params;
