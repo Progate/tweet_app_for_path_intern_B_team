@@ -1,6 +1,6 @@
 import express from "express";
 import {ensureAuthUser} from "@/middlewares/authentication";
-import {getUserFollowCount, createFollow} from "@/models/follow";
+import {getUserFollowCount, createFollow, deleteFollow} from "@/models/follow";
 
 export const followRouter = express.Router();
 
@@ -48,7 +48,7 @@ followRouter.delete("/:userId", ensureAuthUser, async (req, res, next) => {
 
   try{
     await deleteFollow(currentUserId, Number(userId));
-    res.status(200).json({message: `followd userId ${userId}`});
+    res.status(200).json({message: `unfollowd userId ${userId}`});
   }catch(error){
     return next(error);
   }
