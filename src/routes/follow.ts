@@ -37,19 +37,19 @@ followRouter.post("/:userId", ensureAuthUser, async (req, res, next) => {
 followRouter.delete("/:userId", ensureAuthUser, async (req, res, next) => {
   const {userId} = req.params;
   const currentUserId = req.authentication?.currentUserId;
-  if(currentUserId === undefined){
+  if (currentUserId === undefined) {
     return next(new Error("Invalid error: currentUserId is undefined."));
   }
 
   // 自分はunfollowできないようにする
-  if(currentUserId == Number(userId)){
+  if (currentUserId == Number(userId)) {
     return next(new Error("Invalid error: currentUserId is equal to userId."));
   }
 
-  try{
+  try {
     await deleteFollow(currentUserId, Number(userId));
     res.status(200).json({message: `unfollowed userId ${userId}`});
-  }catch(error){
+  } catch (error) {
     return next(error);
   }
 });
