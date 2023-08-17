@@ -14,6 +14,7 @@ import {retweetRouter} from "@/routes/retweet";
 import {dialogMessageMiddleware} from "@/middlewares/dialog_message";
 import {currentUserMiddleware} from "@/middlewares/current_user";
 import {authenticationMiddleware} from "@/middlewares/authentication";
+import { followRouter } from "@/routes/follow";
 
 export const loadMiddlewaresForTweetApp = (app: Express): void => {
   loadMethodOverride(app);
@@ -94,6 +95,7 @@ const loadRouter = (app: Express): void => {
   app.use("/", homeRouter);
   app.use("/", authRouter);
   app.use("/users", userRouter);
+  app.use("/follow", followRouter);
   app.use("/posts", postRouter, likeRouter, retweetRouter);
 };
 
