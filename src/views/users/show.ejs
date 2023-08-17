@@ -4,6 +4,10 @@
       <img src="<%= user.imageName %>" data-test="user-image">
       <h2 data-test="user-name"><%= user.name %></h2>
       <p data-test="user-email"><%= user.email %></p>
+      <button class="follow-button" type="submit">
+        <p class="follow-button-text">Follow</p>
+      </button>
+	    <label class="follow-button-text" for="checkbox1">Apple</label>
       <% if(currentUser.id === user.id) { %>
         <a href="<%= `/users/${user.id}/edit` %>">Edit</a>
       <% } %>

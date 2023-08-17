@@ -598,3 +598,33 @@ input[type="checkbox"] {
 .users-form input {
   margin-bottom: 15px;
 }
+
+/* Follow Button */
+
+.follow-button {
+  border-radius: 2px;
+  background: #3ECDC6;
+  width: 50%;
+  border: initial;
+  width: 120px;
+}
+
+.follow-button:hover{
+  background: #3ECDC6;
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+
+.follow-button-text{
+  margin-bottom: initial!important;
+  color: #FFF;
+  padding: 10px 32px;
+  text-align: center;
+  font-family: Arial;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 2px;
+}
