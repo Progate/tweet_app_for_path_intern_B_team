@@ -53,3 +53,24 @@ export const createFollow = async (
   });
   return follow;
 };
+
+/**
+ *
+ * @param followerId
+ * @param followeeId
+ */
+export const deleteFollow = async (
+  followerId: number,
+  followeeId: number
+): Promise<void> => {
+  const prisma = databaseManager.getInstance();
+  await prisma.follow.delete({
+    where: {
+      /* eslint-disable camelcase */
+      followerId_followeeId: {
+        followerId,
+        followeeId,
+      },
+    },
+  });
+};
