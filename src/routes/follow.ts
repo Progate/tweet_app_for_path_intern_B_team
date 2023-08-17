@@ -48,7 +48,7 @@ followRouter.delete("/:userId", ensureAuthUser, async (req, res, next) => {
 
   try{
     await deleteFollow(currentUserId, Number(userId));
-    res.status(200).json({message: `unfollowd userId ${userId}`});
+    res.status(200).json({message: `unfollowed userId ${userId}`});
   }catch(error){
     return next(error);
   }
