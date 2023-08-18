@@ -20,6 +20,7 @@ import {
 import {ensureCorrectUser} from "@/middlewares/current_user";
 import {body, validationResult} from "express-validator";
 import {HashPassword} from "@/lib/hash_password";
+import { getUserFollowCount } from "@/models/follow";
 
 export const userRouter = express.Router();
 
@@ -64,12 +65,14 @@ userRouter.post(
 userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
   const {userId} = req.params;
   const userTimeline = await getUserPostTimeline(Number(userId));
+  const followCount = await getUserFollowCount(Number(userId));
   if (!userTimeline)
     return next(new Error("Invalid error: The user is undefined."));
   const {user, timeline} = userTimeline;
   res.render("users/show", {
     user,
     timeline,
+    followCount,
   });
 });
 

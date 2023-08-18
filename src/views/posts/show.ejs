@@ -1,9 +1,20 @@
 <div class="main posts-show">
   <div class="container">
     <div class="posts-show-item">
-      <div class="post-user-name">
-        <img class="posts-show-item-image" src="<%= post.user.imageName %>" data-test="user-image">
-        <a href="/users/<%= post.user.id %>" data-test="user-name"><%= post.user.name %></a>
+      <div class="post-user-name" style="display: flex; justify-content: space-between;">
+        <div>
+          <img class="posts-show-item-image" src="<%= post.user.imageName %>" data-test="user-image">
+          <a href="/users/<%= post.user.id %>" data-test="user-name"><%= post.user.name %></a>
+        </div>
+        <% if(isFollowed == true){ %>
+          <button class="following-button" type="submit">
+            <p class="following-button-text">Following</p>
+          </button>
+          <% } else { %>
+          <button class="follow-button" type="submit">
+            <p class="follow-button-text">Follow</p>
+          </button>
+          <% } %>
       </div>
       <p data-test="post-content">
         <%= post.content %>

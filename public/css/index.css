@@ -604,9 +604,9 @@ input[type="checkbox"] {
 .follow-button {
   border-radius: 2px;
   background: #3ECDC6;
-  width: 50%;
   border: initial;
-  width: 120px;
+  width: 100px;
+  height: 45px;
 }
 
 .follow-button:hover{
@@ -617,12 +617,38 @@ input[type="checkbox"] {
 
 
 .follow-button-text{
-  margin-bottom: initial!important;
+  margin: initial!important;
   color: #FFF;
-  padding: 10px 32px;
+  padding: 10px 10px;
   text-align: center;
   font-family: Arial;
-  font-size: 16px;
+  font-size: 12px!important;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 2px;
+}
+
+.following-button{
+  border-radius: 2px;
+  border: 1px solid #3ECDC6!important;
+  border: initial;
+  width: 100px;
+  height: 45px;
+  background: #fff;
+}
+
+.following-button:hover{
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.following-button-text{
+  margin: initial!important;
+  color: #3ECDC6;
+  text-align: center;
+  font-family: Arial;
+  font-size: 12px!important;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
