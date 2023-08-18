@@ -638,11 +638,6 @@ input[type="checkbox"] {
   background: #fff;
 }
 
-.following-button:hover{
-  opacity: 0.8;
-  cursor: pointer;
-}
-
 .following-button-text{
   margin: initial!important;
   color: #3ECDC6;
@@ -653,4 +648,31 @@ input[type="checkbox"] {
   font-weight: 400;
   line-height: normal;
   letter-spacing: 2px;
+}
+
+.following-button:hover .following-button-text{
+  display: none;
+}
+
+.following-button-text-hover{
+  text-align: center;
+  font-family: Arial;
+  font-size: 12px!important;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 2px;
+  color: var(--red, #E75252);
+  display: none;
+}
+
+.following-button:hover .following-button-text-hover{
+  display:inline;
+}
+
+.following-button:hover{
+  opacity: 0.8;
+  cursor: pointer;
+  border: 1px solid var(--red, #E75252)!important;
+  background: rgba(231, 82, 82, 0.10);
 }
