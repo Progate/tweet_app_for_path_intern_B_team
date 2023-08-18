@@ -13,7 +13,9 @@ type FollowCount = {
  * @param userId
  * @returns {FollowCount}
  */
-export const getUserFollowCount = async (userId: number): Promise<FollowCount> => {
+export const getUserFollowCount = async (
+  userId: number
+): Promise<FollowCount> => {
   const prisma = databaseManager.getInstance();
   const FollowCount = await prisma.follow.count({
     where: {
@@ -75,10 +77,10 @@ export const deleteFollow = async (
 };
 
 /**
- * 
- * @param { number } followerId 
- * @param { number } followeeId 
- * @returns { boolean } 
+ *
+ * @param { number } followerId
+ * @param { number } followeeId
+ * @returns { boolean }
  */
 
 export const IsFollow = async (
@@ -93,4 +95,4 @@ export const IsFollow = async (
     },
   });
   return follow !== null;
-}
+};

@@ -20,7 +20,7 @@ import {
 import {ensureCorrectUser} from "@/middlewares/current_user";
 import {body, validationResult} from "express-validator";
 import {HashPassword} from "@/lib/hash_password";
-import { IsFollow, getUserFollowCount } from "@/models/follow";
+import {IsFollow, getUserFollowCount} from "@/models/follow";
 
 export const userRouter = express.Router();
 
@@ -81,7 +81,6 @@ userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
     timeline,
     followCount,
     isFollowed,
-    
   });
 });
 
