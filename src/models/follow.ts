@@ -1,10 +1,10 @@
-import {Follow} from "@prisma/client";
-import {databaseManager} from "@/db/index";
+import { Follow } from "@prisma/client";
+import { databaseManager } from "@/db/index";
+import { selectUserColumnsWithoutPassword, UserWithoutPassword } from "./user";
 
 // type FollowData = Pick<Follow, "followerId" | "followeeId">;
 
 /**
- *
  * @param userId
  * @returns count of user's follow
  */
@@ -19,7 +19,6 @@ export const getUserFollowCount = async (userId: number): Promise<number> => {
 };
 
 /**
- *
  * @param userId
  * @returns count of user's follower
  */
@@ -35,14 +34,13 @@ export const getUserFollowerCount = async (userId: number): Promise<number> => {
 };
 
 /**
- *
  * @param followerId
  * @param followeeId
  * @returns
  */
 export const createFollow = async (
   followerId: number,
-  followeeId: number
+  followeeId: number,
 ): Promise<Follow> => {
   const prisma = databaseManager.getInstance();
   const follow = await prisma.follow.create({
@@ -52,4 +50,50 @@ export const createFollow = async (
     },
   });
   return follow;
+};
+
+/**
+ * @param userId
+ * @return Array of userId's followers
+ */
+export const getFollowers = async (
+  userId: number,
+): Promise<Array<{ follower: UserWithoutPassword }> | null> => {
+  const prisma = databaseManager.getInstance();
+  const followers = await prisma.follow.findMany({
+    where: {
+      followeeId: userId,
+    },
+    select: {
+      follower: {
+        select: {
+          ...selectUserColumnsWithoutPassword,
+        },
+      },
+    },
+  });
+  return followers;
+};
+
+/**
+ * @param userId
+ * @return Array of userId's followers
+ */
+export const getFollowees = async (
+  userId: number,
+): Promise<Array<{ follower: UserWithoutPassword }> | null> => {
+  const prisma = databaseManager.getInstance();
+  const followers = await prisma.follow.findMany({
+    where: {
+      followeeId: userId,
+    },
+    select: {
+      follower: {
+        select: {
+          ...selectUserColumnsWithoutPassword,
+        },
+      },
+    },
+  });
+  return followers;
 };
