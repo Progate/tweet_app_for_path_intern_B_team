@@ -605,8 +605,9 @@ input[type="checkbox"] {
   border-radius: 2px;
   background: #3ECDC6;
   border: initial;
-  width: 100px;
-  height: 45px;
+  width: 121px;
+  height: 34px;
+  margin-top: 16px;
 }
 
 .follow-button:hover{
@@ -633,8 +634,9 @@ input[type="checkbox"] {
   border-radius: 2px;
   border: 1px solid #3ECDC6!important;
   border: initial;
-  width: 100px;
-  height: 45px;
+  width: 121px;
+  height: 34px;
+  margin-top: 16px;
   background: #fff;
 }
 

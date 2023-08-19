@@ -10,7 +10,8 @@
       <%= followCount.followerCount %> follower
       </div>
 
-      <% if(isFollowed == true){ %>
+      <% if(user.id != currentUser.id){ %>
+        <% if(isFollowed == true){ %>
         <button class="following-button" type="submit">
           <p class="following-button-text">Following</p>
           <p class="following-button-text-hover">Unfollow</p>
@@ -19,7 +20,7 @@
         <button class="follow-button" type="submit">
           <p class="follow-button-text">Follow</p>
         </button>
-      <% } %>
+      <% } }%>
       
     </div>
     <ul class="user-tabs">
