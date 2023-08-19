@@ -20,7 +20,7 @@ import {
 import { ensureCorrectUser } from "@/middlewares/current_user";
 import { body, validationResult } from "express-validator";
 import { HashPassword } from "@/lib/hash_password";
-
+import { getFollowees, getFollowers } from "@/models/follow";
 export const userRouter = express.Router();
 
 /** A page to list all users */
@@ -64,6 +64,8 @@ userRouter.post(
 userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
   const { userId } = req.params;
   const userTimeline = await getUserPostTimeline(Number(userId));
+  const followers = await getFollowers(Number(userId));
+  const followees = await getFollowees(Number(userId));
   if (!userTimeline) {
     return next(new Error("Invalid error: The user is undefined."));
   }
@@ -71,6 +73,8 @@ userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
   res.render("users/show", {
     user,
     timeline,
+    followees,
+    followers,
   });
 });
 
@@ -78,6 +82,8 @@ userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
 userRouter.get("/:userId/likes", ensureAuthUser, async (req, res, next) => {
   const { userId } = req.params;
   const userTimeline = await getUserLikesTimeline(Number(userId));
+  const followers = await getFollowers(Number(userId));
+  const followees = await getFollowees(Number(userId));
   if (!userTimeline) {
     return next(new Error("Invalid error: The user is undefined."));
   }
@@ -85,6 +91,8 @@ userRouter.get("/:userId/likes", ensureAuthUser, async (req, res, next) => {
   res.render("users/likes", {
     user,
     timeline,
+    followees,
+    followers,
   });
 });
 
