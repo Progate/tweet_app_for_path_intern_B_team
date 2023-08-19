@@ -678,3 +678,18 @@ input[type="checkbox"] {
   border: 1px solid var(--red, #E75252)!important;
   background: rgba(231, 82, 82, 0.10);
 }
+
+.follow-count-wrap span{
+  color: var(--color-opacity-87-black, #212121);
+  font-family: Avenir Next;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px; /* 171.429% */
+  letter-spacing: 1px;
+  
+}
+
+.follow-count-svg{
+  margin: 0 2px -8px 0px;
+}
