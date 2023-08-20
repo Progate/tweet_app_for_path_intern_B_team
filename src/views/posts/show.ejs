@@ -6,16 +6,7 @@
           <img class="posts-show-item-image" src="<%= post.user.imageName %>" data-test="user-image">
           <a href="/users/<%= post.user.id %>" data-test="user-name"><%= post.user.name %></a>
         </div>
-        <% if(isFollowed == true){ %>
-          <button class="following-button" type="submit">
-            <p class="following-button-text">Following</p>
-            <p class="following-button-text-hover">Unfollow</p>
-          </button>
-          <% } else { %>
-          <button class="follow-button" type="submit">
-            <p class="follow-button-text">Follow</p>
-          </button>
-          <% } %>
+        <%- include('../follow', {userId : post.user.id, isFollowed: isFollowed}); %>
       </div>
       <p data-test="post-content">
         <%= post.content %>
