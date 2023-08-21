@@ -154,7 +154,8 @@ export const getUserfollowedPosts = async (
 ): Promise<
   | (UserWithoutPassword & {
       follows: Array<{
-        post: PostWithUser;
+        //followee: User & {user: UserWithoutPassword};
+        //post: PostWithUser;//ここを消したらエラーが消える
       }>;
     })
   | null
@@ -168,25 +169,42 @@ export const getUserfollowedPosts = async (
       ...selectUserColumnsWithoutPassword,
       follows: {
         orderBy: {
-          post: {
-            createdAt: "desc",
-          },
+          followedAt: "desc",
         },
         select: {
-          post: {
+          followee: {
             select: {
-              id: true,
-              content: true,
-              userId: true,
-              createdAt: true,
-              updatedAt: true,
-              user: {
+              posts: {
                 select: {
-                  ...selectUserColumnsWithoutPassword,
+                  id: true,
+                  content: true,
+                  userId: true,
+                  createdAt: true,
+                  updatedAt: true,
+                  user: {
+                    select: {
+                      ...selectUserColumnsWithoutPassword,
+                    },
+                  },
                 },
               },
             },
           },
+
+          // post: {
+          //  select: {
+          //     id: true,
+          //     content: true,
+          //     userId: true,
+          //     createdAt: true,
+          //     updatedAt: true,
+          //     user: {
+          //       select: {
+          //         ...selectUserColumnsWithoutPassword,
+          //       },
+          //     },
+          //   },
+          // },
         },
       },
     },

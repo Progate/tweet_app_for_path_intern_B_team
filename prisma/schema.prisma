@@ -58,10 +58,11 @@ model Retweet {
   @@map("retweets")
 }
 
+
 model Follow {
   followerId    Int       
-  followeeId    Int       
   follower      User      @relation("UserFollower", fields: [followerId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  followeeId    Int       
   followee      User      @relation("UserFollowee", fields: [followeeId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   followedAt DateTime  @map("followed_at") @default(now())
   @@id([followerId, followeeId])

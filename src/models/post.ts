@@ -4,6 +4,7 @@ import {
   selectUserColumnsWithoutPassword,
   type UserWithoutPassword,
 } from "@/models/user";
+import {User} from "@prisma/client";
 
 type PostData = Pick<Post, "content" | "userId">;
 export type PostWithUser = Post & {user: UserWithoutPassword};
@@ -63,10 +64,31 @@ export const getPost = async (postId: number): Promise<PostWithUser | null> => {
   });
   return post;
 };
-
-export const getAllPosts = async (): Promise<PostWithUser[]> => {
+//全ての投稿を見れるようにするときに再利用可
+// export const getAllPosts = async (): Promise<PostWithUser[]> => {
+//   const prisma = databaseManager.getInstance();
+//   const post = await prisma.post.findMany({
+//     orderBy: {
+//       createdAt: "desc",
+//     },
+//     select: {
+//       id: true,
+//       content: true,
+//       userId: true,
+//       createdAt: true,
+//       updatedAt: true,
+//       user: {
+//         select: {
+//           ...selectUserColumnsWithoutPassword,
+//         },
+//       },
+//     },
+//   });
+//   return post;
+// };
+export const getAllFollowsPosts = async (): Promise<PostWithUser[]> => {
   const prisma = databaseManager.getInstance();
-  const post = await prisma.post.findMany({
+  const post = await prisma.follow.followee.posts.post.findMany({
     orderBy: {
       createdAt: "desc",
     },
