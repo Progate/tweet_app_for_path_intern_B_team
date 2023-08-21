@@ -1,35 +1,36 @@
 body {
-    margin: 0;
+  margin: 0;
 }
 
 ul {
-    margin: 0;
+  margin: 0;
 }
 
 a:hover {
-    background: none;
+  background: none;
 }
 
 a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 header {
-    color: white;
+  color: white;
 }
 
 /* reset ================================ */
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html {
-  font: 100%/1.5 'Avenir Next', 'Hiragino Sans', sans-serif;
+  font: 100%/1.5 "Avenir Next", "Hiragino Sans", sans-serif;
   line-height: 1.7;
   letter-spacing: 1px;
 }
 
-ul, li {
+ul,
+li {
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -41,7 +42,13 @@ a {
   font-size: 14px;
 }
 
-h1, h2, h3, h4, h5, h6, p {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
   margin: 0;
 }
 
@@ -96,7 +103,7 @@ header {
   line-height: 64px;
 }
 
-.header-logo a{
+.header-logo a {
   color: white;
   font-size: 22px;
 }
@@ -125,7 +132,7 @@ header {
 }
 
 .header-menus input[type="submit"] {
-  font-family: 'Avenir Next', 'Hiragino Sans', sans-serif;
+  font-family: "Avenir Next", "Hiragino Sans", sans-serif;
   padding: 0;
   float: left;
   line-height: 64px;
@@ -241,7 +248,7 @@ header {
 }
 
 .form-body:after {
-  content: '';
+  content: "";
   display: table;
   clear: both;
 }
@@ -296,7 +303,7 @@ header {
   text-align: left;
 }
 
-img[data-test=post-image] {
+img[data-test="post-image"] {
   object-fit: cover;
   width: 100%;
 }
@@ -364,7 +371,7 @@ img[data-test=post-image] {
 }
 
 .has-retweeted {
-  color: #19CF86;
+  color: #19cf86;
 }
 
 .post-label {
@@ -382,7 +389,8 @@ img[data-test=post-image] {
   float: right;
 }
 
-.post-menus a, .post-menus input {
+.post-menus a,
+.post-menus input {
   color: #8899a6;
   text-decoration: underline;
   font-size: 14px;
@@ -603,36 +611,35 @@ input[type="checkbox"] {
 
 .follow-button {
   border-radius: 2px;
-  background: #3ECDC6;
+  background: #3ecdc6;
   border: initial;
   width: 121px;
   height: 34px;
   margin-top: 16px;
 }
 
-.follow-button:hover{
-  background: #3ECDC6;
+.follow-button:hover {
+  background: #3ecdc6;
   opacity: 0.8;
   cursor: pointer;
 }
 
-
-.follow-button-text{
-  margin: initial!important;
-  color: #FFF;
+.follow-button-text {
+  margin: initial !important;
+  color: #fff;
   padding: 10px 10px;
   text-align: center;
   font-family: Arial;
-  font-size: 12px!important;
+  font-size: 12px !important;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   letter-spacing: 2px;
 }
 
-.following-button{
+.following-button {
   border-radius: 2px;
-  border: 1px solid #3ECDC6!important;
+  border: 1px solid #3ecdc6 !important;
   border: initial;
   width: 121px;
   height: 34px;
@@ -640,46 +647,46 @@ input[type="checkbox"] {
   background: #fff;
 }
 
-.following-button-text{
-  margin: initial!important;
-  color: #3ECDC6;
+.following-button-text {
+  margin: initial !important;
+  color: #3ecdc6;
   text-align: center;
   font-family: Arial;
-  font-size: 12px!important;
+  font-size: 12px !important;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   letter-spacing: 2px;
 }
 
-.following-button:hover .following-button-text{
+.following-button:hover .following-button-text {
   display: none;
 }
 
-.following-button-text-hover{
+.following-button-text-hover {
   text-align: center;
   font-family: Arial;
-  font-size: 12px!important;
+  font-size: 12px !important;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   letter-spacing: 2px;
-  color: var(--red, #E75252);
+  color: var(--red, #e75252);
   display: none;
 }
 
-.following-button:hover .following-button-text-hover{
-  display:inline;
+.following-button:hover .following-button-text-hover {
+  display: inline;
 }
 
-.following-button:hover{
+.following-button:hover {
   opacity: 0.8;
   cursor: pointer;
-  border: 1px solid var(--red, #E75252)!important;
-  background: rgba(231, 82, 82, 0.10);
+  border: 1px solid var(--red, #e75252) !important;
+  background: rgba(231, 82, 82, 0.1);
 }
 
-.follow-count-wrap span{
+.follow-count-wrap span {
   color: var(--color-opacity-87-black, #212121);
   font-family: Avenir Next;
   font-size: 14px;
@@ -687,9 +694,8 @@ input[type="checkbox"] {
   font-weight: 500;
   line-height: 24px; /* 171.429% */
   letter-spacing: 1px;
-  
 }
 
-.follow-count-svg{
+.follow-count-svg {
   margin: 0 2px -8px 0px;
 }
