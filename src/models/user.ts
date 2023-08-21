@@ -105,10 +105,6 @@ export const getUserWithPostsIncludeRetweet = async (
   return user;
 };
 
-
-
-
-
 export const getUserLikedPosts = async (
   userId: number
 ): Promise<
