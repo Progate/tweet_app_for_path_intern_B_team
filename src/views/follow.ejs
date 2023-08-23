@@ -7,7 +7,7 @@
     </button>
   </form>
   <% } else { %>
-    <form action="/follow/<%= userId %>" method="POST">
+    <form action="/follow/<%= userId %>?redirect=<%= encodeURIComponent(currentUrl)%>" method="POST">
       <button class="follow-button" type="submit">
         <p class="follow-button-text">Follow</p>
       </button>

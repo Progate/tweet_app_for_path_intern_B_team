@@ -24,7 +24,7 @@
               <span><%= followCount.followCount %><span>Following</span></span>
             </div>
             <%- include('../follow', {userId : user.id, isFollowed:
-            isFollowed}); %>
+            isFollowed, currentUrl: currentUrl}); %>
           </div>
           <ul class="user-tabs">
             <li class="active">
