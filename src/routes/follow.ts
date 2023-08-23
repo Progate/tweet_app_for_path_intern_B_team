@@ -1,16 +1,16 @@
 import express from "express";
 import {ensureAuthUser} from "@/middlewares/authentication";
-import {getUserFollowCount, createFollow, deleteFollow} from "@/models/follow";
+import {createFollow, deleteFollow} from "@/models/follow";
 
 export const followRouter = express.Router();
 
 // followの数を取得するAPI (不必要)
-followRouter.get("/:userId", async (req, res) => {
-  const {userId} = req.params;
-  const followCount = await getUserFollowCount(Number(userId));
-  // followCountを返す
-  res.send({followCount});
-});
+// followRouter.get("/:userId", async (req, res) => {
+//   const {userId} = req.params;
+//   const followCount = await getUserFollowCount(Number(userId));
+//   // followCountを返す
+//   res.send({followCount});
+// });
 
 followRouter.post("/:userId", ensureAuthUser, async (req, res, next) => {
   const {userId} = req.params;
