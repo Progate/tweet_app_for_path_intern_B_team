@@ -81,6 +81,7 @@ userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
     timeline,
     followCount,
     isFollowed,
+    currentUrl: req.originalUrl,
   });
 });
 

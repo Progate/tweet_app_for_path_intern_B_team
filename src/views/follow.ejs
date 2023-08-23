@@ -1,13 +1,13 @@
 <% if(userId  != currentUser.id){ %>
   <% if(isFollowed == true){ %>
-    <form action="/follow/<%= userId %>?_method=DELETE" method="POST">
+    <form action="/follow/<%= userId %>?_method=DELETE&redirect=<%= encodeURIComponent(currentUrl)%>" method="POST">
     <button class="following-button" type="submit">
       <p class="following-button-text">Following</p>
       <p class="following-button-text-hover">Unfollow</p>
     </button>
   </form>
   <% } else { %>
-    <form action="/follow/<%= userId %>" method="POST">
+    <form action="/follow/<%= userId %>?redirect=<%= encodeURIComponent(currentUrl)%>" method="POST">
       <button class="follow-button" type="submit">
         <p class="follow-button-text">Follow</p>
       </button>

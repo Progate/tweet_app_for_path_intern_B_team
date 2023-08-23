@@ -15,6 +15,7 @@ export const followRouter = express.Router();
 followRouter.post("/:userId", ensureAuthUser, async (req, res, next) => {
   const {userId} = req.params;
   const currentUserId = req.authentication?.currentUserId;
+  const prevUrl = req.query.redirect;
   if (currentUserId === undefined) {
     // `ensureAuthUser` enforces `currentUserId` is not undefined.
     // This must not happen.
@@ -28,7 +29,7 @@ followRouter.post("/:userId", ensureAuthUser, async (req, res, next) => {
 
   try {
     await createFollow(currentUserId, Number(userId));
-    res.status(200).json({message: `followed userId ${userId}`});
+    res.redirect(String(prevUrl));
   } catch (error) {
     return next(error);
   }
@@ -37,6 +38,7 @@ followRouter.post("/:userId", ensureAuthUser, async (req, res, next) => {
 followRouter.delete("/:userId", ensureAuthUser, async (req, res, next) => {
   const {userId} = req.params;
   const currentUserId = req.authentication?.currentUserId;
+  const prevUrl = req.query.redirect;
   if (currentUserId === undefined) {
     return next(new Error("Invalid error: currentUserId is undefined."));
   }
@@ -48,7 +50,7 @@ followRouter.delete("/:userId", ensureAuthUser, async (req, res, next) => {
 
   try {
     await deleteFollow(currentUserId, Number(userId));
-    res.status(200).json({message: `unfollowed userId ${userId}`});
+    res.redirect(String(prevUrl));
   } catch (error) {
     return next(error);
   }
