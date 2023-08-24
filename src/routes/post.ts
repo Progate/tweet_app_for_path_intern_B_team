@@ -7,7 +7,10 @@ import {getPostRetweetedCount, hasUserRetweetedPost} from "@/models/retweet";
 import {getPostLikedCount, hasUserLikedPost} from "@/models/like";
 import {ensureAuthUser} from "@/middlewares/authentication";
 import {ensureOwnerOfPost} from "@/middlewares/current_user";
-import {getUserFollowsTimeline} from "@/models/user_timeline";
+import {
+  getAllfollowsPostTimeline,
+  //, getUserFollowsTimeline
+} from "@/models/user_timeline";
 export const postRouter = express.Router();
 
 // postRouter.get("/", ensureAuthUser, async (req, res) => {
@@ -19,7 +22,7 @@ export const postRouter = express.Router();
 
 postRouter.get("/", ensureAuthUser, async (req, res) => {
   const {userId} = req.params;
-  const timeline = await getUserFollowsTimeline(Number(userId));
+  const timeline = await getAllfollowsPostTimeline();
   res.render("posts/index", {
     timeline,
   });

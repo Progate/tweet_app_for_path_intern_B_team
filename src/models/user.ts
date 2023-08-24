@@ -2,6 +2,7 @@ import {User} from "@prisma/client";
 import {type PostWithUser} from "@/models/post";
 import {databaseManager} from "@/db/index";
 import {Post} from "@prisma/client";
+import internal from "node:stream";
 
 type UserProfileData = Partial<Pick<User, "name" | "email" | "imageName">>;
 type UserData = Pick<User, "name" | "email" | "password">;
@@ -149,85 +150,112 @@ export const getUserLikedPosts = async (
     },
   });
   return user;
+  //   const user: {
+  //     createdAt: Date;
+  //     id: number;
+  //     updatedAt: Date;
+  //     likes: {
+  //         post: {
+  //             createdAt: Date;
+  //             id: number;
+  //             content: string;
+  //             userId: number;
+  //             updatedAt: Date;
+  //             user: {
+  //                 createdAt: Date;
+  //                 ... 4 more ...;
+  //                 imageName: string;
+  //             };
+  //         };
+  //     }[];
+  //     name: string;
+  //     email: string;
+  //     imageName: string;
+  // } | null
 };
-export const getUserfollowedPosts = async (
-  userId: number
-): Promise<
-  // | (UserWithoutPassword & {
-  //   follows: Array<{
-  //       //sqlで型をきめてから
-  //       //followee: User & {user: UserWithoutPassword};
-  //       //post: PostWithUser;//ここを消したらエラーが消える
-  //     }>;
-  //   })
-  null
-> => {
-  const prisma = databaseManager.getInstance();
-  // const user: {
-  //   follows: {
-  //     followee: {
-  //       createdAt: Date;
-  //       id: number;
-  //       updatedAt: Date;
-  //       name: string;
-  //       email: string;
-  //       imageName: string;
-  //       posts: {
-  //         createdAt: Date;
-  //         id: number;
-  //         content: string;
-  //         userId: number;
-  //         updatedAt: Date;
-  //       }[];
-  //     };
-  //   }[];
-  // } | null;
+// export const getUserfollowedPosts = async (
+//   userId: number
+// ): Promise<
+//   | (UserWithoutPassword & {
+//     follows: Array<{
+//       followee: Array<{
+//         posts: Array<{
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-    select: {
-      follows: {
-        orderBy: {
-          followedAt: "desc",
-        },
-        select: {
-          followee: {
-            select: {
-              ...selectUserColumnsWithoutPassword,
-              posts: {
-                select: {
-                  id: true,
-                  content: true,
-                  userId: true,
-                  createdAt: true,
-                  updatedAt: true,
-                },
-              },
-            },
-          },
+//         }>
+//       }>
+//         //sqlで型をきめてから
+//         //followee: User & {user: UserWithoutPassword};
+//         //post: PostWithUser;//ここを消したらエラーが消える
+//       }>;
+//     })
+//   null
+// > => {
+//   const prisma = databaseManager.getInstance();
+//   // const user: {
+//   //   follows: {
+//   //     followee: {
+//   //       createdAt: Date;
+//   //       id: number;
+//   //       updatedAt: Date;
+//   //       name: string;
+//   //       email: string;
+//   //       imageName: string;
+//   //       posts: {
+//   //         createdAt: Date;
+//   //         id: number;
+//   //         content: string;
+//   //         userId: number;
+//   //         updatedAt: Date;
+//   //       }[];
+//   //     };
+//   //   }[];
+//   // } | null;
 
-          // post: {
-          //  select: {
-          //     id: true,
-          //     content: true,
-          //     userId: true,
-          //     createdAt: true,
-          //     updatedAt: true,
-          //     user: {
-          //       select: {
-          //         ...selectUserColumnsWithoutPassword,
-          //       },
-          //     },
-          //   },
-          // },
-        },
-      },
-    },
-  });
-  return user;
-};
+//   const user = await prisma.user.findUnique({
+//     where: {
+//       id: userId,
+//     },
+//     select: {
+//       follows: {
+//         orderBy: {
+//           followedAt: "desc",
+//         },
+//         select: {
+//           followee: {
+//             select: {
+//               ...selectUserColumnsWithoutPassword,
+//               posts: {
+//                 select: {
+//                   id: true,
+//                   content: true,
+//                   userId: true,
+//                   createdAt: true,
+//                   updatedAt: true,
+//                 },
+//               },
+//             },
+//           },
+
+//           // post: {
+//           //  select: {
+//           //     id: true,
+//           //     content: true,
+//           //     userId: true,
+//           //     createdAt: true,
+//           //     updatedAt: true,
+//           //     user: {
+//           //       select: {
+//           //         ...selectUserColumnsWithoutPassword,
+//           //       },
+//           //     },
+//           //   },
+//           // },
+//         },
+//       },
+//     },
+//   });
+//   return user;
+// };
 
 export const getAllUsers = async (): Promise<UserWithoutPassword[]> => {
   const prisma = databaseManager.getInstance();

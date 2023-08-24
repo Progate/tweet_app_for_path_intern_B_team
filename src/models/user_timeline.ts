@@ -3,7 +3,7 @@ import {
   getUserWithPostsIncludeRetweet,
   UserWithoutPassword,
   getUserLikedPosts,
-  getUserfollowedPosts,
+  //getUserfollowedPosts,
 } from "./user";
 import {getAllRetweetedPosts} from "./retweet";
 
@@ -131,22 +131,22 @@ export const getUserLikesTimeline = async (
     timeline,
   };
 };
-export const getUserFollowsTimeline = async (
-  userId: number
-): Promise<UserTimeline | null> => {
-  const user = await getUserfollowedPosts(userId);
-  if (user === null) return null;
-  const timeline: Timeline[] = user.follows.map((follow): Timeline => {
-    return {
-      type: "follow",
-      post: follow.followee.posts.post,
-      user: user,
-      activedAt: follow.followee.posts.post.createdAt,
-    };
-  });
+// export const getUserFollowsTimeline = async (
+//   userId: number
+// ): Promise<UserTimeline | null> => {
+//   const user = await getUserfollowedPosts(userId);
+//   if (user === null) return null;
+//   const timeline: Timeline[] = user.follows.map((follow): Timeline => {
+//     return {
+//       type: "follow",
+//       post: follow.followee.posts.post,
+//       user: user,
+//       activedAt: follow.followee.posts.post.createdAt,
+//     };
+//   });
 
-  return {
-    user,
-    timeline,
-  };
-};
+//   return {
+//     user,
+//     timeline,
+//   };
+// };
