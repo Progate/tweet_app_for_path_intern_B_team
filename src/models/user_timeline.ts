@@ -111,7 +111,7 @@ export const getAllfollowsPostTimeline = async (
   });
 
   //onst rttimeline: Timeline[] =
-  let rttimeline: Timeline[] = retweetPosts.map((retweet): Timeline => {
+  const rttimeline: Timeline[] = retweetPosts.map((retweet): Timeline => {
     return {
       type: "retweet",
       post: retweet.post,
@@ -120,8 +120,6 @@ export const getAllfollowsPostTimeline = async (
     };
   });
   // const finaltimeline: Timeline[] = timeline.concat(rttimeline);
-
-  let finaltimeline: Timeline[] = timeline.concat(rttimeline);
 
   timeline.sort((a, b) => {
     return b.activedAt.getTime() - a.activedAt.getTime();
