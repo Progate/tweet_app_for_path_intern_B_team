@@ -357,6 +357,6 @@ const main = async (): Promise<void> => {
   ]);
 };
 
-main().catch(async (e) => {
+main().catch(async e => {
   console.error(e);
 });
