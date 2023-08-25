@@ -1,4 +1,4 @@
-import {PostWithUser, getAllFollowsPosts, getAllFollowsPosts2} from "./post";
+import {PostWithUser, getAllFollowsPosts} from "./post";
 import {
   getUserWithPostsIncludeRetweet,
   UserWithoutPassword,
@@ -22,6 +22,7 @@ type UserTimeline = {
   timeline: Timeline[];
 };
 
+//全ての投稿を表示するタイムラインで使用可能
 // export const getAllPostTimeline = async (): Promise<Timeline[]> => {
 //   const posts = await getAllPosts();
 //   const retweetPosts = await getAllRetweetedPosts();
@@ -53,7 +54,7 @@ type UserTimeline = {
 export const getAllfollowsPostTimeline = async (
   userId: number
 ): Promise<Timeline[]> => {
-  const posts = await getAllFollowsPosts2(userId);
+  const posts = await getAllFollowsPosts(userId);
   const retweetPosts = await getAllRetweetedPosts();
 
   // const posts2: Timeline[] =
@@ -181,22 +182,3 @@ export const getUserLikesTimeline = async (
     timeline,
   };
 };
-// export const getUserFollowsTimeline = async (
-//   userId: number
-// ): Promise<UserTimeline | null> => {
-//   const user = await getUserfollowedPosts(userId);
-//   if (user === null) return null;
-//   const timeline: Timeline[] = user.follows.map((follow): Timeline => {
-//     return {
-//       type: "follow",
-//       post: follow.followee.posts.post,
-//       user: user,
-//       activedAt: follow.followee.posts.post.createdAt,
-//     };
-//   });
-
-//   return {
-//     user,
-//     timeline,
-//   };
-// };

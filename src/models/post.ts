@@ -65,7 +65,7 @@ export const getPost = async (postId: number): Promise<PostWithUser | null> => {
   });
   return post;
 };
-//全ての投稿を見れるようにするときに再利用可
+// 全ての投稿を見れるようにするときに再利用可
 // export const getAllPosts = async (): Promise<PostWithUser[]> => {
 //   const prisma = databaseManager.getInstance();
 //   const post = await prisma.post.findMany({
@@ -84,90 +84,11 @@ export const getPost = async (postId: number): Promise<PostWithUser | null> => {
 //         },
 //       },
 //     },
-//   });
+// });
 //   return post;
 // };
 
 export const getAllFollowsPosts = async (
-  userId: number
-): Promise<Array<{}>> => {
-  const prisma = databaseManager.getInstance();
-  // const post = await prisma.follow.followee.post.findMany({
-  //   orderBy: {
-  //     createdAt: "desc",
-  //   },
-  //   select: {
-  //     id: true,
-  //     content: true,
-  //     userId: true,
-  //     createdAt: true,
-  //     updatedAt: true,
-  //     user: {
-  //       select: {
-  //         ...selectUserColumnsWithoutPassword,
-  //       },
-  //     },
-  //   },
-  // });
-  const post = await prisma.follow.findMany({
-    where: {
-      followerId: userId,
-    },
-    select: {
-      followee: {
-        select: {
-          ...selectUserColumnsWithoutPassword,
-          posts: {
-            select: {
-              id: true,
-              content: true,
-              userId: true,
-              createdAt: true,
-              updatedAt: true,
-            },
-          },
-        },
-      },
-    },
-  });
-  //   const post: {
-  //     followee: {
-  //         UserWithoutPassword;
-  //         Post[];
-  //     };
-  // }[]
-  // Array<{UserWithoutPassword; Array<Post>;}>
-
-  // where: {
-  //   followerId: userId,
-  // },
-  // select: {
-  //   followee: {
-
-  //     select: {
-  //       posts: {
-  //         select: {
-  //           ...selectUserColumnsWithoutPassword,
-  //           id: true,
-  //           content: true,
-  //           userId: true,
-  //           createdAt: true,
-  //           updatedAt: true,
-  //         },
-  //       },
-  //     },
-  //   },
-  // },
-  // });
-  // //   const post: {
-  // //     followee: {
-  // //         PostWithUser[];
-  // //     };
-  // // }[]
-  // // Array<PostWithUser>
-  return post;
-};
-export const getAllFollowsPosts2 = async (
   userId: number
 ): Promise<
   Array<{
@@ -230,92 +151,3 @@ export const getAllFollowsPosts2 = async (
 
   return post2;
 };
-// export const vvvvv = async (
-//   userId: number
-// ): Promise<Array<
-//   | (UserWithoutPassword & {
-//       posts: Array<Post>;
-//     })
-//   | null
-// >> => {
-//   const prisma = databaseManager.getInstance();
-//   const post = await prisma.follow.findMany({
-//     where: {
-//       followerId: userId,
-//     },
-//     select: {
-//       followee: {
-//         select: {
-//           ...selectUserColumnsWithoutPassword,
-//           posts: {
-//             select: {
-//               id: true,
-//               content: true,
-//               userId: true,
-//               createdAt: true,
-//               updatedAt: true,
-//             },
-//           },
-//         },
-//       },
-//     },
-//   });
-//   return post;
-// };
-
-// type followeetest = UserWithoutPassword & { posts: Array<{}>}
-
-// export const gxxxx = async (
-//   userId: number
-// ): Promise<Followee2> => {
-//   const prisma = databaseManager.getInstance();
-//   const post = await prisma.follow.findMany({
-//     select: {
-//       followee: {
-
-//         select: {
-//           ...selectUserColumnsWithoutPassword,
-//           posts: {
-//             select: {
-//               id: true,
-//               content: true,
-//               userId: true,
-//               createdAt: true,
-//               updatedAt: true,
-//             },
-//           },
-//         },
-//       },
-//     },
-//   });
-//   return post;
-// }
-
-// export const getAllFollowsPosts2 = async (
-//   userId: number
-// ): Promise<followeetest>
-//  => {
-//   const prisma = databaseManager.getInstance();
-//   const post = await prisma.follow.findMany({
-//     where: {
-//       followerId: userId,
-//     },
-//     select: {
-//       followee: {
-
-//         select: {
-//           ...selectUserColumnsWithoutPassword,
-//           posts: {
-//             select: {
-//               id: true,
-//               content: true,
-//               userId: true,
-//               createdAt: true,
-//               updatedAt: true,
-//             },
-//           },
-//         },
-//       },
-//     },
-//   });
-//   return post;
