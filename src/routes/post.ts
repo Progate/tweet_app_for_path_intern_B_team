@@ -21,8 +21,9 @@ export const postRouter = express.Router();
 // });
 
 postRouter.get("/", ensureAuthUser, async (req, res) => {
+  const currentUserId = req.authentication?.currentUserId;
   const {userId} = req.params;
-  const timeline = await getAllfollowsPostTimeline();
+  const timeline = await getAllfollowsPostTimeline(Number(currentUserId));
   res.render("posts/index", {
     timeline,
   });

@@ -11,7 +11,7 @@ import {
 import {
   getUserPostTimeline,
   getUserLikesTimeline,
-  getUserFollowsTimeline,
+  //getUserFollowsTimeline,
 } from "@/models/user_timeline";
 import {
   isUniqueEmail,

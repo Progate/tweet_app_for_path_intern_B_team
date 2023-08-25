@@ -1,4 +1,4 @@
-import {PostWithUser, getAllFollowsPosts} from "./post";
+import {PostWithUser, getAllFollowsPosts, getAllFollowsPosts2} from "./post";
 import {
   getUserWithPostsIncludeRetweet,
   UserWithoutPassword,
@@ -6,6 +6,7 @@ import {
   //getUserfollowedPosts,
 } from "./user";
 import {getAllRetweetedPosts} from "./retweet";
+import {currentUserMiddleware} from "@/middlewares/current_user";
 
 type TweetType = "tweet" | "retweet" | "like" | "follow";
 
@@ -49,28 +50,77 @@ type UserTimeline = {
 //   });
 //   return timeline;
 // };
-export const getAllfollowsPostTimeline = async (): Promise<Timeline[]> => {
-  const posts = await getAllFollowsPosts();
+export const getAllfollowsPostTimeline = async (
+  userId: number
+): Promise<Timeline[]> => {
+  const posts = await getAllFollowsPosts2(userId);
   const retweetPosts = await getAllRetweetedPosts();
-  const timeline: Timeline[] = posts
-    .map((post): Timeline => {
+
+  // const posts2: Timeline[] =
+  // 加工場所
+  // 1. getAllFollowsPosts2の中のクエリで加工
+  // 2. ここ
+  posts.map(users => {
+    users.posts.map((post): Timeline => {
       return {
         type: "tweet",
-        post,
-        user: post.user,
+        post: post,
+        user: users.user,
         activedAt: post.createdAt,
       };
-    })
-    .concat(
-      retweetPosts.map((retweet): Timeline => {
+    });
+  });
+  // .map((post): Timeline => {
+  //   return {
+  //     type: "tweet",
+  //     post,
+  //     user: post.user,
+  //     activedAt: post.createdAt,
+  //   };
+  // })
+
+  //
+  // {PostWithUser}[]
+  //
+  // {
+  //  User
+  // {PostWithUser}[]
+  // }[]
+  //
+  //
+
+  let timeline: Timeline[] = [];
+  posts.map((posts): void => {
+    //ここの型定義がvoidになってる
+    // timeline[postid]
+    timeline = timeline.concat(
+      //timelineが決まり切る前に下でtimelineをつかっている？
+      // timeline[postid] += timeline[postid]
+      posts.posts.map((post): Timeline => {
+        // timeline[postid]
         return {
-          type: "retweet",
-          post: retweet.post,
-          user: retweet.user,
-          activedAt: retweet.retweetedAt,
+          // timeline
+          type: "tweet",
+          post,
+          user: post.user,
+          activedAt: post.createdAt,
         };
       })
     );
+  });
+
+  //onst rttimeline: Timeline[] =
+  let rttimeline: Timeline[] = retweetPosts.map((retweet): Timeline => {
+    return {
+      type: "retweet",
+      post: retweet.post,
+      user: retweet.user,
+      activedAt: retweet.retweetedAt,
+    };
+  });
+  // const finaltimeline: Timeline[] = timeline.concat(rttimeline);
+
+  let finaltimeline: Timeline[] = timeline.concat(rttimeline);
 
   timeline.sort((a, b) => {
     return b.activedAt.getTime() - a.activedAt.getTime();
