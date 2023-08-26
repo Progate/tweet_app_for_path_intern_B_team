@@ -65,28 +65,28 @@ export const getPost = async (postId: number): Promise<PostWithUser | null> => {
   });
   return post;
 };
-// 全ての投稿を見れるようにするときに再利用可
-// export const getAllPosts = async (): Promise<PostWithUser[]> => {
-//   const prisma = databaseManager.getInstance();
-//   const post = await prisma.post.findMany({
-//     orderBy: {
-//       createdAt: "desc",
-//     },
-//     select: {
-//       id: true,
-//       content: true,
-//       userId: true,
-//       createdAt: true,
-//       updatedAt: true,
-//       user: {
-//         select: {
-//           ...selectUserColumnsWithoutPassword,
-//         },
-//       },
-//     },
-// });
-//   return post;
-// };
+
+export const getAllPosts = async (): Promise<PostWithUser[]> => {
+  const prisma = databaseManager.getInstance();
+  const post = await prisma.post.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    select: {
+      id: true,
+      content: true,
+      userId: true,
+      createdAt: true,
+      updatedAt: true,
+      user: {
+        select: {
+          ...selectUserColumnsWithoutPassword,
+        },
+      },
+    },
+  });
+  return post;
+};
 
 export const getAllFollowsPosts = async (
   userId: number

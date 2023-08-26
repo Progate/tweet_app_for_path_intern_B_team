@@ -1,4 +1,4 @@
-import {PostWithUser, getAllFollowsPosts} from "./post";
+import {PostWithUser, getAllFollowsPosts, getAllPosts} from "./post";
 import {
   getUserWithPostsIncludeRetweet,
   UserWithoutPassword,
@@ -24,34 +24,34 @@ type UserTimeline = {
 };
 
 //全ての投稿を表示するタイムラインで使用可能
-// export const getAllPostTimeline = async (): Promise<Timeline[]> => {
-//   const posts = await getAllPosts();
-//   const retweetPosts = await getAllRetweetedPosts();
-//   const timeline: Timeline[] = posts
-//     .map((post): Timeline => {
-//       return {
-//         type: "tweet",
-//         post,
-//         user: post.user,
-//         activedAt: post.createdAt,
-//       };
-//     })
-//     .concat(
-//       retweetPosts.map((retweet): Timeline => {
-//         return {
-//           type: "retweet",
-//           post: retweet.post,
-//           user: retweet.user,
-//           activedAt: retweet.retweetedAt,
-//         };
-//       })
-//     );
+export const getAllPostTimeline = async (): Promise<Timeline[]> => {
+  const posts = await getAllPosts();
+  const retweetPosts = await getAllRetweetedPosts();
+  const timeline: Timeline[] = posts
+    .map((post): Timeline => {
+      return {
+        type: "tweet",
+        post,
+        user: post.user,
+        activedAt: post.createdAt,
+      };
+    })
+    .concat(
+      retweetPosts.map((retweet): Timeline => {
+        return {
+          type: "retweet",
+          post: retweet.post,
+          user: retweet.user,
+          activedAt: retweet.retweetedAt,
+        };
+      })
+    );
 
-//   timeline.sort((a, b) => {
-//     return b.activedAt.getTime() - a.activedAt.getTime();
-//   });
-//   return timeline;
-// };
+  timeline.sort((a, b) => {
+    return b.activedAt.getTime() - a.activedAt.getTime();
+  });
+  return timeline;
+};
 export const getAllfollowsPostTimeline = async (
   userId: number
 ): Promise<Timeline[] | null> => {
