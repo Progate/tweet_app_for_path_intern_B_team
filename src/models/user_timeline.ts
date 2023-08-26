@@ -54,7 +54,7 @@ type UserTimeline = {
 // };
 export const getAllfollowsPostTimeline = async (
   userId: number
-): Promise<Timeline[]> => {
+): Promise<Timeline[] | null> => {
   const posts = await getAllFollowsPosts(userId);
   const retweetPosts = await getAllRetweetedPosts();
 
@@ -111,17 +111,39 @@ export const getAllfollowsPostTimeline = async (
     );
   });
 
-  //onst rttimeline: Timeline[] =
-  const rttimeline: Timeline[] = retweetPosts.map((retweet): Timeline => {
-    return {
-      type: "retweet",
-      post: retweet.post,
-      user: retweet.user,
-      activedAt: retweet.retweetedAt,
-    };
-  });
-  timeline = timeline.concat(rttimeline);
-  // const finaltimeline: Timeline[] = timeline.concat(rttimeline);
+  // //onst rttimeline: Timeline[] =
+  // const rttimeline: Timeline[] = retweetPosts.map((retweet): Timeline => {
+  //   return {
+  //     type: "retweet",
+  //     post: retweet.post,
+  //     user: retweet.user,
+  //     activedAt: retweet.retweetedAt,
+  //   };
+  // });
+  // timeline = timeline.concat(rttimeline);
+  // // const finaltimeline: Timeline[] = timeline.concat(rttimeline);
+  const user = await getUserWithPostsIncludeRetweet(userId);
+  if (user === null) return null;
+  const retweetUserTimeline: Timeline[] = user.posts
+    .map((post): Timeline => {
+      return {
+        type: "tweet",
+        post,
+        user: post.user,
+        activedAt: post.createdAt,
+      };
+    })
+    .concat(
+      user.retweets.map((retweet): Timeline => {
+        return {
+          type: "retweet",
+          post: retweet.post,
+          user: retweet.user,
+          activedAt: retweet.retweetedAt,
+        };
+      })
+    );
+  timeline = timeline.concat(retweetUserTimeline);
 
   timeline.sort((a, b) => {
     return b.activedAt.getTime() - a.activedAt.getTime();
