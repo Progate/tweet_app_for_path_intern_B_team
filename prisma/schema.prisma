@@ -58,6 +58,7 @@ model Retweet {
   @@map("retweets")
 }
 
+
 model Follow {
   follower      User      @relation("UserFollower", fields: [followerId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   followerId    Int       

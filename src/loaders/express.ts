@@ -8,6 +8,7 @@ import methodOverride from "method-override";
 import {homeRouter} from "@/routes/home";
 import {userRouter} from "@/routes/user";
 import {authRouter} from "@/routes/auth";
+import {followingpostRouter} from "@/routes/followingpost";
 import {postRouter} from "@/routes/post";
 import {likeRouter} from "@/routes/like";
 import {retweetRouter} from "@/routes/retweet";
@@ -97,6 +98,7 @@ const loadRouter = (app: Express): void => {
   app.use("/users", userRouter);
   app.use("/follow", followRouter);
   app.use("/posts", postRouter, likeRouter, retweetRouter);
+  app.use("/followingposts", followingpostRouter, likeRouter, retweetRouter);
 };
 
 const loadSecureHeaders = (app: Express): void => {
