@@ -36,6 +36,7 @@ export const insertLikes = async (
     `successfully inserted records of ${createMany.count} to likes table`,
   );
 };
+
 export const insertFollows = async (
   data: Prisma.Enumerable<Prisma.FollowCreateManyInput>,
 ): Promise<void> => {
