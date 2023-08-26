@@ -74,11 +74,9 @@
       <span data-test="retweet-count"> <%= retweetCount %> </span>
       <% if(post.user.id === currentUser.id) { %>
       <div class="post-menus">
-        <a href="/followingposts/<%= post.id %>/edit" data-test="post-link-edit"
-          >Edit</a
-        >
+        <a href="/posts/<%= post.id %>/edit" data-test="post-link-edit">Edit</a>
         <form
-          action="/followingposts/<%= post.id %>?_method=DELETE"
+          action="/posts/<%= post.id %>?_method=DELETE"
           method="POST"
           data-test="form-like-delete"
         >
