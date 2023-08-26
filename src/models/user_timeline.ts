@@ -7,6 +7,7 @@ import {
 } from "./user";
 import {getAllRetweetedPosts} from "./retweet";
 import {currentUserMiddleware} from "@/middlewares/current_user";
+import {time} from "console";
 
 type TweetType = "tweet" | "retweet" | "like" | "follow";
 
@@ -119,6 +120,7 @@ export const getAllfollowsPostTimeline = async (
       activedAt: retweet.retweetedAt,
     };
   });
+  timeline = timeline.concat(rttimeline);
   // const finaltimeline: Timeline[] = timeline.concat(rttimeline);
 
   timeline.sort((a, b) => {

@@ -98,7 +98,7 @@ export const getAllFollowsPosts = async (
 > => {
   const prisma = databaseManager.getInstance();
 
-  const postOrigin = await prisma.follow.findMany({
+  const post_origin = await prisma.follow.findMany({
     where: {
       followerId: userId,
     },
@@ -119,7 +119,7 @@ export const getAllFollowsPosts = async (
       },
     },
   });
-  const post2 = postOrigin.map(record => {
+  const post2 = post_origin.map(record => {
     return {
       user: {
         id: record.followee.id,
