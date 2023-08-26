@@ -60,9 +60,6 @@ model Retweet {
 
 
 model Follow {
-
-      
-
   follower      User      @relation("UserFollower", fields: [followerId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   followerId    Int       
   followee      User      @relation("UserFollowee", fields: [followeeId], references: [id], onUpdate: Cascade, onDelete: Cascade)

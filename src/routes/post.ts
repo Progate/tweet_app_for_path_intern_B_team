@@ -8,6 +8,8 @@ import {getPostLikedCount, hasUserLikedPost} from "@/models/like";
 import {ensureAuthUser} from "@/middlewares/authentication";
 import {ensureOwnerOfPost} from "@/middlewares/current_user";
 import {getAllfollowsPostTimeline} from "@/models/user_timeline";
+import {IsFollow} from "@/models/follow";
+
 export const postRouter = express.Router();
 
 // postRouter.get("/", ensureAuthUser, async (req, res) => {
