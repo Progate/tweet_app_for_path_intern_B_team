@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import {Prisma, PrismaClient} from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const insertUsers = async (
@@ -30,7 +30,7 @@ export const insertLikes = async (
 ): Promise<void> => {
   const createMany = await prisma.like.createMany({
     data,
-    skipDuplicates: true,
+    skipDuplicates: true
   });
   console.log(
     `successfully inserted records of ${createMany.count} to likes table`
