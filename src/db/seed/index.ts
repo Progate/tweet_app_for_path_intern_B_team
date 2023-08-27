@@ -42,7 +42,7 @@ export const insertFollows = async (
 ): Promise<void> => {
   const createMany = await prisma.follow.createMany({
     data,
-    skipDuplicates: true,
+    skipDuplicates: true
   });
   console.log(
     `successfully inserted records of ${createMany.count} to follows table`
