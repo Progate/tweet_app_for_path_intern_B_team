@@ -112,6 +112,7 @@ userRouter.get("/:userId/likes", ensureAuthUser, async (req, res, next) => {
     return next(new Error("Invalid error: currentUserId is undefined."));
   }
   const userTimeline = await getUserLikesTimeline(Number(userId));
+
   const followers: UserWithBool[] = await getFollowersWithIsFollowed(
     Number(userId),
     currentUserId
@@ -119,6 +120,8 @@ userRouter.get("/:userId/likes", ensureAuthUser, async (req, res, next) => {
   const followees: UserWithBool[] = await getFolloweesWithIsFollowed(
     Number(userId)
   );
+  const isFollowed = await IsFollow(currentUserId, Number(userId));
+  const followCount = await getUserFollowCount(Number(userId));
   if (!userTimeline) {
     return next(new Error("Invalid error: The user is undefined."));
   }
@@ -128,6 +131,9 @@ userRouter.get("/:userId/likes", ensureAuthUser, async (req, res, next) => {
     timeline,
     followees,
     followers,
+    followCount,
+    isFollowed,
+    currentUrl: req.originalUrl,
   });
 });
 

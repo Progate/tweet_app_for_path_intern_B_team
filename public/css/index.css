@@ -716,8 +716,6 @@ a.modal-follow-open {
 a.modal-follow-open:hover {
   cursor: pointer;
   opacity: 0.8;
-  border: 1px solid #5270e7 !important;
-  background: rgba(104, 82, 231, 0.1);
 }
 
 /* 

@@ -61,7 +61,7 @@ export const createFollow = async (
  * @return Array of userId's followers
  */
 export const getFollowers = async (
-  userId: number,
+  userId: number
 ): Promise<UserWithoutPassword[]> => {
   const prisma = databaseManager.getInstance();
   const followers = await prisma.follow.findMany({
@@ -137,13 +137,15 @@ export const getFollowersWithIsFollowed = async (
   currentUserId: number
 ): Promise<UserWithBool[]> => {
   const followers = await getFollowers(userId);
-  const final = await Promise.all(followers.map(async (user) => {
-    console.log(user, user.id,currentUserId, "user/current");
-    return {
-      user: user,
-      isfollowed: await IsFollow(currentUserId,user.id),
-    };
-  }));
+  const final = await Promise.all(
+    followers.map(async user => {
+      console.log(user, user.id, currentUserId, "user/current");
+      return {
+        user: user,
+        isfollowed: await IsFollow(currentUserId, user.id),
+      };
+    })
+  );
   return final;
 };
 
@@ -155,14 +157,12 @@ export const getFolloweesWithIsFollowed = async (
   userId: number
 ): Promise<UserWithBool[]> => {
   const followees = await getFollowees(userId);
-  const final: UserWithBool[] = 
-    followees.map(user => {
-      return {
-        user: user,
-        isfollowed: true
-      };
-    }
-  );
+  const final: UserWithBool[] = followees.map(user => {
+    return {
+      user: user,
+      isfollowed: true,
+    };
+  });
   return final;
 };
 
@@ -174,7 +174,7 @@ export const deleteFollow = async (
   followerId: number,
   followeeId: number
 ): Promise<void> => {
-  console.log(followeeId,followerId);
+  console.log(followeeId, followerId);
   const prisma = databaseManager.getInstance();
   await prisma.follow.delete({
     where: {
