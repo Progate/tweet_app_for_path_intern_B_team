@@ -61,43 +61,7 @@ export const createFollow = async (
  * @return Array of userId's followers
  */
 export const getFollowers = async (
-  userId: number
-): Promise<UserWithoutPassword[]> => {
-  const prisma = databaseManager.getInstance();
-  const followers = await prisma.follow.findMany({
-    where: {
-      followerId: userId,
-    },
-    orderBy: {
-      followedAt: "asc",
-    },
-    select: {
-      followee: {
-        select: {
-          ...selectUserColumnsWithoutPassword,
-        },
-      },
-    },
-  });
-  const final = followers.map((user): UserWithoutPassword => {
-    return {
-      id: user.followee.id,
-      name: user.followee.name,
-      imageName: user.followee.imageName,
-      email: user.followee.email,
-      createdAt: user.followee.createdAt,
-      updatedAt: user.followee.updatedAt,
-    };
-  });
-  return final;
-};
-
-/**
- * @param userId
- * @return Array of userId's followers
- */
-export const getFollowees = async (
-  userId: number
+  userId: number,
 ): Promise<UserWithoutPassword[]> => {
   const prisma = databaseManager.getInstance();
   const followers = await prisma.follow.findMany({
@@ -118,11 +82,47 @@ export const getFollowees = async (
   const final = followers.map((user): UserWithoutPassword => {
     return {
       id: user.follower.id,
-      email: user.follower.email,
       name: user.follower.name,
       imageName: user.follower.imageName,
-      updatedAt: user.follower.updatedAt,
+      email: user.follower.email,
       createdAt: user.follower.createdAt,
+      updatedAt: user.follower.updatedAt,
+    };
+  });
+  return final;
+};
+
+/**
+ * @param userId
+ * @return Array of userId's followers
+ */
+export const getFollowees = async (
+  userId: number
+): Promise<UserWithoutPassword[]> => {
+  const prisma = databaseManager.getInstance();
+  const followees = await prisma.follow.findMany({
+    where: {
+      followerId: userId,
+    },
+    orderBy: {
+      followedAt: "asc",
+    },
+    select: {
+      followee: {
+        select: {
+          ...selectUserColumnsWithoutPassword,
+        },
+      },
+    },
+  });
+  const final = followees.map((user): UserWithoutPassword => {
+    return {
+      id: user.followee.id,
+      email: user.followee.email,
+      name: user.followee.name,
+      imageName: user.followee.imageName,
+      updatedAt: user.followee.updatedAt,
+      createdAt: user.followee.createdAt,
     };
   });
   return final;
@@ -133,15 +133,17 @@ export const getFollowees = async (
  * @return Array of userId's followers
  */
 export const getFollowersWithIsFollowed = async (
-  userId: number
+  userId: number,
+  currentUserId: number
 ): Promise<UserWithBool[]> => {
   const followers = await getFollowers(userId);
-  const final = followers.map((user): UserWithBool => {
+  const final = await Promise.all(followers.map(async (user) => {
+    console.log(user, user.id,currentUserId, "user/current");
     return {
       user: user,
-      isfollowed: true,
+      isfollowed: await IsFollow(currentUserId,user.id),
     };
-  });
+  }));
   return final;
 };
 
@@ -150,17 +152,16 @@ export const getFollowersWithIsFollowed = async (
  * @return Array of userId's followers
  */
 export const getFolloweesWithIsFollowed = async (
-  userId: number,
-  currentUserId: number
+  userId: number
 ): Promise<UserWithBool[]> => {
   const followees = await getFollowees(userId);
-  const final: UserWithBool[] = await Promise.all(
-    followees.map(async user => {
+  const final: UserWithBool[] = 
+    followees.map(user => {
       return {
         user: user,
-        isfollowed: await IsFollow(userId, currentUserId),
+        isfollowed: true
       };
-    })
+    }
   );
   return final;
 };
@@ -173,6 +174,7 @@ export const deleteFollow = async (
   followerId: number,
   followeeId: number
 ): Promise<void> => {
+  console.log(followeeId,followerId);
   const prisma = databaseManager.getInstance();
   await prisma.follow.delete({
     where: {

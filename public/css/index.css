@@ -881,7 +881,6 @@ div.modal-follow input[type=radio]#following-tab-button:checked ~ div.modal-wind
   display:block;
 }
 
-
 div.modal-follow input[type=radio]#modal-close:checked~.modal-close,
 div.modal-follow input[type=radio]#modal-close:checked~.modal-overlay,
 div.modal-follow input[type=radio]#modal-overlay:checked~.modal-close,
@@ -901,24 +900,39 @@ label.follow-list-button{
   cursor: pointer;
 }
 
-
-div.follow-index-item{
-    padding: 20px 30px;
+ul.follow-index-item{
+    padding: 0px 30px;
     background-color: white;
     overflow: hidden;
     box-shadow: 0 4px 10px #c1ced7;
+    display: flex;
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
+    align-items: center;
 }
 
-
-div.follow-list-left {
-  float:left;
-  width: 10%;
-  display: inline;
+ul.follow-index-item li a  {
+  text-decoration: none;
+  font-size:12pt;
+  font-weight: 30;
+  color:#1d3744;
+}
+ul.follow-index-item li:nth-of-type(1) {
+  
+  padding-right:max(calc(2vw - 15px), 10px);
+}
+ul.follow-index-item li:nth-of-type(2) {
+  margin-right: auto;
+}
+ul.follow-index-item li:nth-of-type(3) {
+}
+/* div.follow-list-left {
+  display: flex;
+  justify-content: flex-start;
 }
 div.follow-list-right {
-  display: inline;
-  float:right;
+  display: flex;
+  justify-content:flex-end;
     width: 90%;
-    padding-left: 25px;
     text-align: left;
-}
+} */

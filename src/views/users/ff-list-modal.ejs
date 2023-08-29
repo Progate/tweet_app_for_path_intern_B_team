@@ -36,11 +36,9 @@
       <div class="modal-content">
         <div class="modal-tab-wrap">
           <div class="tab-content tab-content-follower">
-            コンテンツ 1st: followers
             <%- include('ff-list-item', {users:followers, currentUrl: currentUrl}); %>
           </div>
           <div class="tab-content tab-content-following">
-            コンテンツ 2nd: following
             <%- include('ff-list-item', {users:followees, currentUrl: currentUrl}); %>
           </div>
         </div>

@@ -16,6 +16,7 @@ followRouter.post("/:userId", ensureAuthUser, async (req, res, next) => {
   const {userId} = req.params;
   const currentUserId = req.authentication?.currentUserId;
   const prevUrl = req.query.redirect;
+  console.log(currentUserId,userId);
   if (currentUserId === undefined) {
     // `ensureAuthUser` enforces `currentUserId` is not undefined.
     // This must not happen.
