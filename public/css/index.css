@@ -717,8 +717,10 @@ a.modal-follow-open:hover {
   cursor: pointer;
   opacity: 0.8;
   border: 1px solid #5270e7 !important;
-  background: rgba(104, 82, 231, 0.1); 
+  background: rgba(104, 82, 231, 0.1);
 }
+
+/* 
 .modal-follow:not(:target) {
   opacity: 0;
   visibility: hidden;
@@ -728,7 +730,7 @@ a.modal-follow-open:hover {
   opacity: 1;
   visibility: visible;
   transition: opacity .4s, visibility .4s;
-}
+} */
 
 div.modal-wrapper {
   display: flex;
@@ -745,7 +747,7 @@ div.modal-wrapper {
   z-index: 999;
 }
 
-a.modal-overlay {
+label.modal-overlay {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -757,12 +759,12 @@ a.modal-overlay {
   bottom: 0;
   z-index: 1000;
 }
+
 /* window の管理*/
-div.modal-wrapper div.modal-window{
+div.modal-wrapper div.modal-window {
   display: block;
   position: relative;
-  height: auto;
-  max-height: max(calc(70vh - 80px),500px);
+  max-height: max(calc(70vh - 80px), 80vh);
   width: max(calc(70vw - 15px), 300px);
   margin: 0 15px;
   border-radius: 2px;
@@ -774,35 +776,40 @@ div.modal-wrapper div.modal-window{
 
 /* modal tab header contents*/
 div.modal-header {
-  display:block;
+  display: block;
 }
+
 ul.modal-header-buttons {
-    background-color: white;
-    overflow: hidden;
-    box-shadow: 0 2px 6px #c1ced7;
+  background-color: white;
+  overflow: hidden;
+  box-shadow: 0 2px 6px #c1ced7;
 }
-ul.modal-header-buttons li.modal-follow-tab{
-    float: left;
+
+ul.modal-header-buttons li.modal-follow-tab {
+  float: left;
 }
+
 ul.modal-header-buttons li.modal-follow-tab label {
   display: inline-block;
   padding: 16px 30px;
   color: #afb6bf;
 }
 
-div.modal-follow input[type=radio]#following-tab-button:checked ~ div.modal-window ul.modal-header-buttons li.modal-following-tab {
+div.modal-follow input[type=radio]#following-tab-button:checked~div.modal-wrapper ul.modal-header-buttons li.modal-following-tab {
   border-bottom: 2px solid #3ecdc6;
 }
-div.modal-follow input[type=radio]#follower-tab-button:checked ~ div.modal-window ul.modal-header-buttons li.modal-follower-tab {
+
+div.modal-follow input[type=radio]#follower-tab-button:checked~div.modal-wrapper ul.modal-header-buttons li.modal-follower-tab {
   border-bottom: 2px solid #3ecdc6;
+  display:flex;
 }
 
 
 /* close button */
-a.modal-close {
+label.modal-close {
   width: 30px;
   height: 30px;
-  background-color: rgba(230,230,230,0.8);
+  background-color: rgba(230, 230, 230, 0.8);
   border-radius: 5px;
   position: absolute;
   padding: 12px auto;
@@ -812,7 +819,8 @@ a.modal-close {
   cursor: pointer;
 }
 
-a.modal-close::before, a.modal-close::after {
+label.modal-close::before,
+label.modal-close::after {
   content: "";
   display: block;
   width: 15px;
@@ -825,33 +833,34 @@ a.modal-close::before, a.modal-close::after {
   bottom: 0;
   margin: auto;
 }
-a.modal-close::before {
+
+label.modal-close::before {
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
 }
-a.modal-close::after {
+
+label.modal-close::after {
   -webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
 }
 
 /* modal tab content*/
-div.modal-content {
+div.modal-tab-wrap {
   display: block;
   height: auto;
-  max-height: calc(100vh - 80px);
+  max-height: max(calc(70vh - 20px), calc(80vh - 60px));
   margin: 0 0px;
   position: relative;
   z-index: 1001;
+  overflow-y: scroll;
 }
 
 div.modal-list {
   width: auto;
 }
 
-div.modal-list-item {}
-
 div.modal-follow input[type="radio"] {
-  display: none;
+  visibility: hidden;
   opacity: 0;
   width: 0;
   height: 0;
@@ -860,72 +869,92 @@ div.modal-follow input[type="radio"] {
 }
 
 
-/* tab内切り替え */
-/* div.modal-follow input[type=radio]#following-tab-button:checked ~ div.modal-window ul.modal-header-buttons li.modal-following-tab {
-  border-bottom: 2px solid #3ecdc6;
-}
-div.modal-follow input[type=radio]#follower-tab-button:checked ~ div.modal-window ul.modal-header-buttons li.modal-follower-tab {
-  border-bottom: 2px solid #3ecdc6;
-} */
-div.modal-follow input[type=radio]#follower-tab-button:not(:checked) ~ div.modal-window div.modal-tab-wrap div.tab-content-follower{
-  display:none;
-}
-div.modal-follow input[type=radio]#follower-tab-button:checked ~ div.modal-window div.modal-tab-wrap div.tab-content-follower{
-  display:block;
-}
-
-div.modal-follow input[type=radio]#following-tab-button:not(:checked) ~ div.modal-window div.modal-tab-wrap div.tab-content-following{
-  display:none;
-}
-div.modal-follow input[type=radio]#following-tab-button:checked ~ div.modal-window div.modal-tab-wrap div.tab-content-following{
-  display:block;
-}
-
-div.modal-follow input[type=radio]#modal-close:checked~.modal-close,
-div.modal-follow input[type=radio]#modal-close:checked~.modal-overlay,
-div.modal-follow input[type=radio]#modal-overlay:checked~.modal-close,
-div.modal-follow input[type=radio]#modal-overlay:checked~.modal-overlay {
+/* tab内のcontent切り替え */
+div.modal-follow input[type=radio]#follower-tab-button:not(:checked)~div.modal-wrapper div.modal-tab-wrap div.tab-content-follower {
   display: none;
 }
 
-div.modal-follow input[type=radio] {
+div.modal-follow input[type=radio]#follower-tab-button:checked~div.modal-wrapper div.modal-tab-wrap div.tab-content-follower {
+  display: block;
+}
+
+div.modal-follow input[type=radio]#following-tab-button:not(:checked)~div.modal-wrapper div.modal-tab-wrap div.tab-content-following {
   display: none;
+}
+
+div.modal-follow input[type=radio]#following-tab-button:checked~div.modal-wrapper div.modal-tab-wrap div.tab-content-following {
+  display: block;
+}
+
+div.modal-follow input[type=radio]#modal-close:checked~div.modal-wrapper,
+div.modal-follow input[type=radio]#modal-overlay:checked~div.modal-wrapper {
   opacity: 0;
-  width: 0;
-  height: 0;
-  margin: 0;
-  padding: 0;
+  visibility: hidden;
+  transition: opacity .4s, visibility .4s;
 }
-label.follow-list-button{
+
+div.modal-follow input[type=radio]#modal-close:not(:checked)~input[type=radio]#modal-overlay:not(:checked)~div.modal-wrapper {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .4s, visibility .4s;
+}
+
+
+div.modal-follow input[type=radio]#modal-close:checked~div.modal-wrapper label.modal-close,
+div.modal-follow input[type=radio]#modal-close:checked~div.modal-wrapper label.modal-overlay,
+div.modal-follow input[type=radio]#modal-overlay:checked~div.modal-wrapper label.modal-close,
+div.modal-follow input[type=radio]#modal-overlay:checked~div.modal-wrapper label.modal-overlay div.modal-follow input[type=radio]#modal-overlay:checked~div.modal-wrapper {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .4s, visibility .4s;
+}
+
+label.follow-list-button {
   cursor: pointer;
 }
 
-ul.follow-index-item{
-    padding: 0px 30px;
-    background-color: white;
-    overflow: hidden;
-    box-shadow: 0 4px 10px #c1ced7;
-    display: flex;
-    -webkit-justify-content: flex-start;
-    justify-content: flex-start;
-    align-items: center;
+ul.follow-index-item {
+  padding: 0px 30px;
+  background-color: white;
+  overflow: hidden;
+  box-shadow: 0 4px 10px #c1ced7;
+  display: flex;
+  -webkit-justify-content: flex-start;
+  justify-content: flex-start;
+  align-items: center;
 }
 
-ul.follow-index-item li a  {
+div.modal-tab-wrap::-webkit-scrollbar {
+  border-radius: 10px;
+  width: 10px;
+  /* スクロールバーの幅 */
+}
+
+/* スクロールバーのツマミ部分 */
+::-webkit-scrollbar-thumb {
+  background-color: #b6b6b6;
+  /* ツマミの色を変更 */
+  border-radius: 10px;
+  /* 角を丸くする */
+}
+
+ul.follow-index-item li a {
   text-decoration: none;
-  font-size:12pt;
+  font-size: 12pt;
   font-weight: 30;
-  color:#1d3744;
+  color: #1d3744;
 }
+
 ul.follow-index-item li:nth-of-type(1) {
-  
-  padding-right:max(calc(2vw - 15px), 10px);
+  padding-right: max(calc(2vw - 15px), 10px);
 }
+
 ul.follow-index-item li:nth-of-type(2) {
   margin-right: auto;
 }
-ul.follow-index-item li:nth-of-type(3) {
-}
+
+ul.follow-index-item li:nth-of-type(3) {}
+
 /* div.follow-list-left {
   display: flex;
   justify-content: flex-start;

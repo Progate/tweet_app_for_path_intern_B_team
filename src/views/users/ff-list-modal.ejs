@@ -1,37 +1,27 @@
 <div class="modal-follow" id="modal-follow">
+  <input type="radio" name="modal-follow" id="modal-close">
+  <input type="radio" name="modal-follow" id="modal-overlay" checked>
+  <input id="follower-tab-button" type="radio" name="modal-follow" class="tab-switch" />
+  <input id="following-tab-button" type="radio" name="modal-follow" class="tab-switch" />
   <div class="modal-wrapper">
-    <input type="radio" name="modal-follow" id="modal-close">
-    <input type="radio" name="modal-follow" id="modal-overlay" checked>
-    <input id="follower-tab-button" type="radio" name="modal-follow" class="tab-switch" />
-    <input id="following-tab-button" type="radio" name="modal-follow" class="tab-switch" />
-
-    <a href="#" class="modal-overlay">
-      <label for="modal-overlay" class="modal-overlay">
-        
-      </label>
-    </a>
+    <label for="modal-overlay" class="modal-overlay">
+    </label>
     <div class="modal-window">
       <div class="modal-header">
         <ul class="modal-header-buttons">
-          
-          
+
+
           <li class="modal-follow-tab modal-follower-tab">
             <label class="tab-label" for="follower-tab-button">followers</label>
+            <span class="focus-border"></span>
           </li>
 
           <li class="modal-follow-tab modal-following-tab">
             <label class="tab-label" for="following-tab-button">followings</label>
+            <span class="focus-border"></span>
           </li>
-   
-        
         </ul>
-        <div class="modal-close">
-          <a href="#" class="modal-close">
-            <label for="modal-close" class="modal-close">
-              
-            </label>
-          </a>
-        </div>
+            <label for="modal-close" class="modal-close"></label>
       </div>
       <div class="modal-content">
         <div class="modal-tab-wrap">
