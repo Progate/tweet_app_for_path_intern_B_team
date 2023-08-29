@@ -9,7 +9,7 @@ export const insertUsers = async (
     skipDuplicates: true,
   });
   console.log(
-    `successfully inserted records of ${createMany.count} to users table`,
+    `successfully inserted records of ${createMany.count} to user table`,
   );
 };
 
@@ -21,7 +21,7 @@ export const insertPosts = async (
     skipDuplicates: true,
   });
   console.log(
-    `successfully inserted records of ${createMany.count} to posts table`,
+    `successfully inserted records of ${createMany.count} to post table`,
   );
 };
 
@@ -33,7 +33,7 @@ export const insertLikes = async (
     skipDuplicates: true,
   });
   console.log(
-    `successfully inserted records of ${createMany.count} to likes table`,
+    `successfully inserted records of ${createMany.count} to like table`,
   );
 };
 export const insertFollows = async (
