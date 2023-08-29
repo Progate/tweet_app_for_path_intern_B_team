@@ -1,6 +1,8 @@
 import {User} from "@prisma/client";
 import {type PostWithUser} from "@/models/post";
 import {databaseManager} from "@/db/index";
+import {Post} from "@prisma/client";
+import internal from "node:stream";
 
 type UserProfileData = Partial<Pick<User, "name" | "email" | "imageName">>;
 type UserData = Pick<User, "name" | "email" | "password">;
