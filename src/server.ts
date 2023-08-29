@@ -1,5 +1,5 @@
-import { app } from "@/app";
-import { DatabaseManager } from "@/db";
+import {app} from "@/app";
+import {DatabaseManager} from "@/db";
 
 export const runServer = (): void => {
   const port = process.env.PORT || 8000;
