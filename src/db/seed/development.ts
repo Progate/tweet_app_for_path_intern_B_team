@@ -1,4 +1,4 @@
-import {insertFollows, insertLikes, insertPosts, insertUsers} from "./index";
+import { insertFollows, insertLikes, insertPosts, insertUsers } from "./index";
 
 const main = async (): Promise<void> => {
   await insertUsers([
@@ -218,6 +218,6 @@ const main = async (): Promise<void> => {
   ]);
 };
 
-main().catch(async e => {
+main().catch(async (e) => {
   console.error(e);
 });
