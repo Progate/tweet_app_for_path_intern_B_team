@@ -44,6 +44,6 @@ export const insertFollows = async (
     skipDuplicates: true,
   });
   console.log(
-    `successfully inserted records of ${createMany.count} to follows table`,
+    `successfully inserted records of ${createMany.count} to follow table`,
   );
 };
