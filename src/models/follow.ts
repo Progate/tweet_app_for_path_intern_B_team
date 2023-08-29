@@ -4,33 +4,37 @@ import {selectUserColumnsWithoutPassword, UserWithoutPassword} from "./user";
 
 // type FollowData = Pick<Follow, "followerId" | "followeeId">;
 
+type FollowCount = {
+  followCount: number;
+  followerCount: number;
+};
+export type UserWithBool = {user: UserWithoutPassword} & {
+  isfollowed: boolean;
+};
 /**
  * @param userId
- * @returns count of user's follow
+ * @returns {FollowCount}
  */
-export const getUserFollowCount = async (userId: number): Promise<number> => {
+export const getUserFollowCount = async (
+  userId: number
+): Promise<FollowCount> => {
   const prisma = databaseManager.getInstance();
-  const count = await prisma.follow.count({
+  const FollowCount = await prisma.follow.count({
     where: {
       followerId: userId,
     },
   });
-  return count;
-};
 
-/**
- * @param userId
- * @returns count of user's follower
- */
-
-export const getUserFollowerCount = async (userId: number): Promise<number> => {
-  const prisma = databaseManager.getInstance();
-  const count = await prisma.follow.count({
+  const FolloweeCount = await prisma.follow.count({
     where: {
       followeeId: userId,
     },
   });
-  return count;
+
+  return {
+    followCount: FollowCount,
+    followerCount: FolloweeCount,
+  };
 };
 
 /**
@@ -58,21 +62,34 @@ export const createFollow = async (
  */
 export const getFollowers = async (
   userId: number
-): Promise<Array<{follower: UserWithoutPassword}> | null> => {
+): Promise<UserWithoutPassword[]> => {
   const prisma = databaseManager.getInstance();
   const followers = await prisma.follow.findMany({
     where: {
-      followeeId: userId,
+      followerId: userId,
+    },
+    orderBy: {
+      followedAt: "asc",
     },
     select: {
-      follower: {
+      followee: {
         select: {
           ...selectUserColumnsWithoutPassword,
         },
       },
     },
   });
-  return followers;
+  const final = followers.map((user): UserWithoutPassword => {
+    return {
+      id: user.followee.id,
+      name: user.followee.name,
+      imageName: user.followee.imageName,
+      email: user.followee.email,
+      createdAt: user.followee.createdAt,
+      updatedAt: user.followee.updatedAt,
+    };
+  });
+  return final;
 };
 
 /**
@@ -81,11 +98,14 @@ export const getFollowers = async (
  */
 export const getFollowees = async (
   userId: number
-): Promise<Array<{follower: UserWithoutPassword}> | null> => {
+): Promise<UserWithoutPassword[]> => {
   const prisma = databaseManager.getInstance();
   const followers = await prisma.follow.findMany({
     where: {
       followeeId: userId,
+    },
+    orderBy: {
+      followedAt: "asc",
     },
     select: {
       follower: {
@@ -95,5 +115,92 @@ export const getFollowees = async (
       },
     },
   });
-  return followers;
+  const final = followers.map((user): UserWithoutPassword => {
+    return {
+      id: user.follower.id,
+      email: user.follower.email,
+      name: user.follower.name,
+      imageName: user.follower.imageName,
+      updatedAt: user.follower.updatedAt,
+      createdAt: user.follower.createdAt,
+    };
+  });
+  return final;
+};
+
+/**
+ * @param userId
+ * @return Array of userId's followers
+ */
+export const getFollowersWithIsFollowed = async (
+  userId: number
+): Promise<UserWithBool[]> => {
+  const followers = await getFollowers(userId);
+  const final = followers.map((user): UserWithBool => {
+    return {
+      user: user,
+      isfollowed: true,
+    };
+  });
+  return final;
+};
+
+/**
+ * @param userId
+ * @return Array of userId's followers
+ */
+export const getFolloweesWithIsFollowed = async (
+  userId: number,
+  currentUserId: number
+): Promise<UserWithBool[]> => {
+  const followees = await getFollowees(userId);
+  const final: UserWithBool[] = await Promise.all(
+    followees.map(async user => {
+      return {
+        user: user,
+        isfollowed: await IsFollow(userId, currentUserId),
+      };
+    })
+  );
+  return final;
+};
+
+/**
+ * @param followerId
+ * @param followeeId
+ */
+export const deleteFollow = async (
+  followerId: number,
+  followeeId: number
+): Promise<void> => {
+  const prisma = databaseManager.getInstance();
+  await prisma.follow.delete({
+    where: {
+      /* eslint-disable camelcase */
+      followerId_followeeId: {
+        followerId,
+        followeeId,
+      },
+    },
+  });
+};
+
+/**
+ * @param { number } followerId
+ * @param { number } followeeId
+ * @returns { boolean }
+ */
+
+export const IsFollow = async (
+  followerId: number,
+  followeeId: number
+): Promise<boolean> => {
+  const prisma = databaseManager.getInstance();
+  const follow = await prisma.follow.findFirst({
+    where: {
+      followerId,
+      followeeId,
+    },
+  });
+  return follow !== null;
 };

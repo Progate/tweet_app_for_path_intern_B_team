@@ -20,7 +20,12 @@ import {
 import {ensureCorrectUser} from "@/middlewares/current_user";
 import {body, validationResult} from "express-validator";
 import {HashPassword} from "@/lib/hash_password";
-import {getFollowees, getFollowers} from "@/models/follow";
+import {
+  getFolloweesWithIsFollowed,
+  getFollowersWithIsFollowed,
+} from "@/models/follow";
+import {getUserFollowCount, IsFollow, UserWithBool} from "@/models/follow";
+
 export const userRouter = express.Router();
 
 /** A page to list all users */
@@ -63,27 +68,58 @@ userRouter.post(
 /** A page to show user details */
 userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
   const {userId} = req.params;
+  const currentUserId = req.authentication?.currentUserId;
+  if (currentUserId === undefined) {
+    // `ensureAuthUser` enforces `currentUserId` is not undefined.
+    // This must not happen.
+    return next(new Error("Invalid error: currentUserId is undefined."));
+  }
   const userTimeline = await getUserPostTimeline(Number(userId));
-  const followers = await getFollowers(Number(userId));
-  const followees = await getFollowees(Number(userId));
+  const followers: UserWithBool[] = await getFollowersWithIsFollowed(
+    Number(userId)
+  );
+  const followees: UserWithBool[] = await getFolloweesWithIsFollowed(
+    Number(userId),
+    currentUserId
+  );
+  const isFollowed = await IsFollow(currentUserId, Number(userId));
+  const followCount = await getUserFollowCount(Number(userId));
   if (!userTimeline) {
-    return next(new Error("Invalid error: The user is undefined."));
+    if (!userTimeline) {
+      return next(new Error("Invalid error: The user is undefined."));
+    }
   }
   const {user, timeline} = userTimeline;
+  console.log(followers);
+  console.log(followees);
   res.render("users/show", {
     user,
     timeline,
     followees,
     followers,
+    followCount,
+    isFollowed,
+    currentUrl: req.originalUrl,
   });
 });
 
 /** A page to list all tweets liked by a user */
 userRouter.get("/:userId/likes", ensureAuthUser, async (req, res, next) => {
   const {userId} = req.params;
+  const currentUserId = req.authentication?.currentUserId;
+  if (currentUserId === undefined) {
+    // `ensureAuthUser` enforces `currentUserId` is not undefined.
+    // This must not happen.
+    return next(new Error("Invalid error: currentUserId is undefined."));
+  }
   const userTimeline = await getUserLikesTimeline(Number(userId));
-  const followers = await getFollowers(Number(userId));
-  const followees = await getFollowees(Number(userId));
+  const followers: UserWithBool[] = await getFollowersWithIsFollowed(
+    Number(userId)
+  );
+  const followees: UserWithBool[] = await getFolloweesWithIsFollowed(
+    Number(userId),
+    currentUserId
+  );
   if (!userTimeline) {
     return next(new Error("Invalid error: The user is undefined."));
   }

@@ -1,0 +1,17 @@
+<div class="follow-list-container">
+	<% users.forEach(userd => { %>
+	  <div class="follow-index-item">
+		<div class="follow-list-left">
+		  <img src="<%= userd.user.imageName %>">
+		  <div class="follow-user-name">
+			<a href="/users/<%= userd.user.id %>">
+			  <%= userd.user.name %>
+			</a>
+		  </div>
+		</div>
+		<div class="follow-right">
+			<%- include('../follow', {userId : userd.user.id, isFollowed: userd.isFollowed, currentUrl: currentUrl}); %>
+		</div>
+	  </div>
+	  <% }) %>
+  </div>
