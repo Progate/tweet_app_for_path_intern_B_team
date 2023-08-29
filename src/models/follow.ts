@@ -139,7 +139,6 @@ export const getFollowersWithIsFollowed = async (
   const followers = await getFollowers(userId);
   const final = await Promise.all(
     followers.map(async user => {
-      console.log(user, user.id, currentUserId, "user/current");
       return {
         user: user,
         isfollowed: await IsFollow(currentUserId, user.id),
@@ -174,7 +173,6 @@ export const deleteFollow = async (
   followerId: number,
   followeeId: number
 ): Promise<void> => {
-  console.log(followeeId, followerId);
   const prisma = databaseManager.getInstance();
   await prisma.follow.delete({
     where: {
