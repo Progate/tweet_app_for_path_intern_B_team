@@ -98,8 +98,8 @@ const loadRouter = (app: Express): void => {
   app.use("/", authRouter);
   app.use("/users", userRouter);
   app.use("/follow", followRouter);
-  app.use("/posts", postRouter, likeRouter, retweetRouter);
-  app.use("/followingposts", followingpostRouter, likeRouter, retweetRouter);
+  app.use("/all-posts", postRouter, likeRouter, retweetRouter);
+  app.use("/posts", followingpostRouter, likeRouter, retweetRouter);
   app.use(errRouter);
 };
 
