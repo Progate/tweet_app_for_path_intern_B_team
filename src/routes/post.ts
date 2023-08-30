@@ -8,6 +8,7 @@ import {getPostLikedCount, hasUserLikedPost} from "@/models/like";
 import {ensureAuthUser} from "@/middlewares/authentication";
 import {ensureOwnerOfPost} from "@/middlewares/current_user";
 import {IsFollow} from "@/models/follow";
+import {checkuint}from "@/models/validation"
 export const postRouter = express.Router();
 
 postRouter.get("/", ensureAuthUser, async (req, res) => {
@@ -28,7 +29,22 @@ postRouter.get("/new", ensureAuthUser, (req, res) => {
 
 postRouter.get("/:postId", ensureAuthUser, async (req, res, next) => {
   const {postId} = req.params;
-  const post = await getPost(Number(postId));
+  const post = await getPost(()=>{
+    const val = checkuint(postId)
+    switch(val){
+      case: -1{
+  res
+    .status(404)
+    .send(
+      '<body style="margin: 0; background: #000; color: #fff"><div style="display: flex;align-items: center; justify-content: center; height: 90vh;font-family: Arial, sans-serif;"><div><h1 style="font-size: 45px">Not Found</h1>  </div></div></body>'
+    );
+        return;
+      }
+      case: -2{
+        
+      }
+    }
+  });
   if (!post || !post.id)
     return next(new Error("Invalid error: The post or post.id is undefined."));
 

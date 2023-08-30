@@ -1,6 +1,6 @@
 import express from "express";
-import {ensureAuthUser} from "@/middlewares/authentication";
-import {createFollow, deleteFollow} from "@/models/follow";
+import { ensureAuthUser } from "@/middlewares/authentication";
+import { createFollow, deleteFollow } from "@/models/follow";
 
 export const followRouter = express.Router();
 
@@ -13,7 +13,7 @@ export const followRouter = express.Router();
 // });
 
 followRouter.post("/:userId", ensureAuthUser, async (req, res, next) => {
-  const {userId} = req.params;
+  const { userId } = req.params;
   const currentUserId = req.authentication?.currentUserId;
   const prevUrl = req.query.redirect;
   if (currentUserId === undefined) {
@@ -36,7 +36,7 @@ followRouter.post("/:userId", ensureAuthUser, async (req, res, next) => {
 });
 
 followRouter.delete("/:userId", ensureAuthUser, async (req, res, next) => {
-  const {userId} = req.params;
+  const { userId } = req.params;
   const currentUserId = req.authentication?.currentUserId;
   const prevUrl = req.query.redirect;
   if (currentUserId === undefined) {

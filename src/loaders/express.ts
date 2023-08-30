@@ -1,22 +1,23 @@
-import express, {Express} from "express";
+import express, { Express } from "express";
 import session from "cookie-session";
 import expressLayouts from "express-ejs-layouts";
 import helmet from "helmet";
 import logger from "morgan";
 import path from "node:path";
 import methodOverride from "method-override";
-import {homeRouter} from "@/routes/home";
-import {userRouter} from "@/routes/user";
-import {authRouter} from "@/routes/auth";
-import {followingpostRouter} from "@/routes/followingpost";
-import {postRouter} from "@/routes/post";
-import {likeRouter} from "@/routes/like";
-import {retweetRouter} from "@/routes/retweet";
-import {errRouter} from "@/routes/err";
-import {dialogMessageMiddleware} from "@/middlewares/dialog_message";
-import {currentUserMiddleware} from "@/middlewares/current_user";
-import {authenticationMiddleware} from "@/middlewares/authentication";
-import {followRouter} from "@/routes/follow";
+import { homeRouter } from "@/routes/home";
+import { userRouter } from "@/routes/user";
+import { authRouter } from "@/routes/auth";
+import { followingpostRouter } from "@/routes/followingpost";
+import { postRouter } from "@/routes/post";
+import { likeRouter } from "@/routes/like";
+import { retweetRouter } from "@/routes/retweet";
+import { errRouter } from "@/routes/err";
+import { errHandler } from "@/middlewares/errHandler";
+import { dialogMessageMiddleware } from "@/middlewares/dialog_message";
+import { currentUserMiddleware } from "@/middlewares/current_user";
+import { authenticationMiddleware } from "@/middlewares/authentication";
+import { followRouter } from "@/routes/follow";
 
 export const loadMiddlewaresForTweetApp = (app: Express): void => {
   loadMethodOverride(app);
@@ -29,6 +30,7 @@ export const loadMiddlewaresForTweetApp = (app: Express): void => {
   loadUser(app);
   loadMessage(app);
   loadRouter(app);
+  loadErrorHandlers(app);
 };
 
 const loadMethodOverride = (app: Express): void => {
@@ -51,7 +53,7 @@ const loadStatic = (app: Express): void => {
 
 const loadBodyParser = (app: Express): void => {
   app.use(express.json());
-  app.use(express.urlencoded({extended: false}));
+  app.use(express.urlencoded({ extended: false }));
 };
 
 const loadSession = (app: Express): void => {
@@ -71,7 +73,7 @@ const loadSession = (app: Express): void => {
       // and it can lead data breach.
       signed: true,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week in milliseconds
-    })
+    }),
   );
 };
 
@@ -114,7 +116,11 @@ const loadSecureHeaders = (app: Express): void => {
         directives: {
           upgradeInsecureRequests: null,
         },
-      })
+      }),
     );
   }
+};
+
+const loadErrorHandlers = (app: Express): void => {
+  app.use(errHandler);
 };
