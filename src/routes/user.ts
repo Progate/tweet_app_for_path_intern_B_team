@@ -3,25 +3,29 @@ import {join} from "node:path";
 import multer from "multer";
 import {nanoid} from "nanoid";
 import {
-  getAllUsers,
   createUser,
+  getAllUsers,
   getUser,
   updateUserProfile,
 } from "@/models/user";
 import {
-  getUserPostTimeline,
   getUserLikesTimeline,
+  getUserPostTimeline,
   //getUserFollowsTimeline,
 } from "@/models/user_timeline";
 import {
-  isUniqueEmail,
   ensureAuthUser,
   forbidAuthUser,
+  isUniqueEmail,
 } from "@/middlewares/authentication";
 import {ensureCorrectUser} from "@/middlewares/current_user";
 import {body, validationResult} from "express-validator";
 import {HashPassword} from "@/lib/hash_password";
-import {IsFollow, getUserFollowCount} from "@/models/follow";
+import {
+  getFolloweesWithIsFollowed,
+  getFollowersWithIsFollowed,
+} from "@/models/follow";
+import {getUserFollowCount, IsFollow, UserWithBool} from "@/models/follow";
 
 export const userRouter = express.Router();
 
@@ -72,14 +76,26 @@ userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
     return next(new Error("Invalid error: currentUserId is undefined."));
   }
   const userTimeline = await getUserPostTimeline(Number(userId));
+  const followers: UserWithBool[] = await getFollowersWithIsFollowed(
+    Number(userId),
+    currentUserId
+  );
+  const followees: UserWithBool[] = await getFolloweesWithIsFollowed(
+    Number(userId)
+  );
   const isFollowed = await IsFollow(currentUserId, Number(userId));
   const followCount = await getUserFollowCount(Number(userId));
-  if (!userTimeline)
-    return next(new Error("Invalid error: The user is undefined."));
+  if (!userTimeline) {
+    if (!userTimeline) {
+      return next(new Error("Invalid error: The user is undefined."));
+    }
+  }
   const {user, timeline} = userTimeline;
   res.render("users/show", {
     user,
     timeline,
+    followees,
+    followers,
     followCount,
     isFollowed,
     currentUrl: req.originalUrl,
@@ -89,13 +105,35 @@ userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
 /** A page to list all tweets liked by a user */
 userRouter.get("/:userId/likes", ensureAuthUser, async (req, res, next) => {
   const {userId} = req.params;
+  const currentUserId = req.authentication?.currentUserId;
+  if (currentUserId === undefined) {
+    // `ensureAuthUser` enforces `currentUserId` is not undefined.
+    // This must not happen.
+    return next(new Error("Invalid error: currentUserId is undefined."));
+  }
   const userTimeline = await getUserLikesTimeline(Number(userId));
-  if (!userTimeline)
+
+  const followers: UserWithBool[] = await getFollowersWithIsFollowed(
+    Number(userId),
+    currentUserId
+  );
+  const followees: UserWithBool[] = await getFolloweesWithIsFollowed(
+    Number(userId)
+  );
+  const isFollowed = await IsFollow(currentUserId, Number(userId));
+  const followCount = await getUserFollowCount(Number(userId));
+  if (!userTimeline) {
     return next(new Error("Invalid error: The user is undefined."));
+  }
   const {user, timeline} = userTimeline;
   res.render("users/likes", {
     user,
     timeline,
+    followees,
+    followers,
+    followCount,
+    isFollowed,
+    currentUrl: req.originalUrl,
   });
 });
 
@@ -121,6 +159,7 @@ const storage = multer.diskStorage({
     cb(null, outFileName);
   },
 });
+
 const upload = multer({
   storage,
   fileFilter: (req, file, cb) => {
@@ -141,10 +180,11 @@ const upload = multer({
       return ["image", mediaSubtype];
     };
     const mediaType = toAcceptableImageMediaType(file.mimetype);
-    if (mediaType === null)
+    if (mediaType === null) {
       return cb(
         new Error("Only image files in png or jpeg format can be uploaded")
       );
+    }
     cb(null, true);
   },
 });
