@@ -12,7 +12,7 @@ import {followingpostRouter} from "@/routes/followingpost";
 import {postRouter} from "@/routes/post";
 import {likeRouter} from "@/routes/like";
 import {retweetRouter} from "@/routes/retweet";
-import { errRouter  }from "@/routes/err";
+import {errRouter} from "@/routes/err";
 import {dialogMessageMiddleware} from "@/middlewares/dialog_message";
 import {currentUserMiddleware} from "@/middlewares/current_user";
 import {authenticationMiddleware} from "@/middlewares/authentication";
