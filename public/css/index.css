@@ -279,6 +279,8 @@ header {
   color: #3ecdc6;
   font-weight:900;
   float: right;
+  display: flex; 
+  align-item: center;
 }
 
 .posts-title {
