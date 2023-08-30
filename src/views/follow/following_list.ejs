@@ -1,0 +1,34 @@
+<div class="modal-following" id="modal-following">
+ <div class="modal">
+  <div id="following-list">
+   <h1>Following</h1>
+   <div class="following-list">
+    <% following.foreach(user) => { %>
+    <div class="following-item">
+     <a href="/users/<%= user.id %>">
+      <div class="following-item-left">
+       <img src="<%= user.imageName %>">
+      </div>
+      <div class="following-item-centre">
+      <span class="following-item-name">
+       <%= user.name %>
+      </span>
+      </div>
+      <div class="following-item-right">
+       <% include('../follow', {userId : post.user.id, isFollowed: isFollowed}); -%>
+      </div>
+     </a>
+    </div>
+    <% } %>
+   </div>
+  </div>
+ </div>
+</div>
+
+
+
+
+
+
+
+
