@@ -1,4 +1,4 @@
-import {PrismaClient, Prisma} from "@prisma/client";
+import {Prisma, PrismaClient} from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const insertUsers = async (
@@ -9,7 +9,7 @@ export const insertUsers = async (
     skipDuplicates: true,
   });
   console.log(
-    `successfully inserted records of ${createMany.count} to users table`
+    `successfully inserted records of ${createMany.count} to user table`
   );
 };
 
@@ -21,7 +21,7 @@ export const insertPosts = async (
     skipDuplicates: true,
   });
   console.log(
-    `successfully inserted records of ${createMany.count} to posts table`
+    `successfully inserted records of ${createMany.count} to post table`
   );
 };
 
@@ -33,6 +33,17 @@ export const insertLikes = async (
     skipDuplicates: true,
   });
   console.log(
-    `successfully inserted records of ${createMany.count} to likes table`
+    `successfully inserted records of ${createMany.count} to like table`
+  );
+};
+export const insertFollows = async (
+  data: Prisma.Enumerable<Prisma.FollowCreateManyInput>
+): Promise<void> => {
+  const createMany = await prisma.follow.createMany({
+    data,
+    skipDuplicates: true,
+  });
+  console.log(
+    `successfully inserted records of ${createMany.count} to follow table`
   );
 };
