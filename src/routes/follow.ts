@@ -1,6 +1,7 @@
 import express from "express";
 import {ensureAuthUser} from "@/middlewares/authentication";
 import {createFollow, deleteFollow} from "@/models/follow";
+import {HTTPStatusError} from "@/middlewares/errHandler";
 
 export const followRouter = express.Router();
 
@@ -19,19 +20,23 @@ followRouter.post("/:userId", ensureAuthUser, async (req, res, next) => {
   if (currentUserId === undefined) {
     // `ensureAuthUser` enforces `currentUserId` is not undefined.
     // This must not happen.
-    return next(new Error("Invalid error: currentUserId is undefined."));
+    return next(new HTTPStatusError("Invalid error: user ID is undefind", 422));
   }
 
   // 自分はフォローできないようにする
   if (currentUserId === Number(userId)) {
-    return next(new Error("Invalid error: currentUserId is equal to userId."));
+    return next(
+      new HTTPStatusError("Invalid error: currentUserId is your ID", 400)
+    );
   }
 
   try {
     await createFollow(currentUserId, Number(userId));
     res.redirect(String(prevUrl));
   } catch (error) {
-    return next(error);
+    return next(
+      new HTTPStatusError("Invalid error: user ID is not number", 501, error)
+    );
   }
 });
 
@@ -40,18 +45,22 @@ followRouter.delete("/:userId", ensureAuthUser, async (req, res, next) => {
   const currentUserId = req.authentication?.currentUserId;
   const prevUrl = req.query.redirect;
   if (currentUserId === undefined) {
-    return next(new Error("Invalid error: currentUserId is undefined."));
+    return next(new HTTPStatusError("Invalid error: user ID is undefind", 422));
   }
 
   // 自分はunfollowできないようにする
   if (currentUserId == Number(userId)) {
-    return next(new Error("Invalid error: currentUserId is equal to userId."));
+    return next(
+      new HTTPStatusError("Invalid error: currentUserId is your ID", 400)
+    );
   }
 
   try {
     await deleteFollow(currentUserId, Number(userId));
     res.redirect(String(prevUrl));
   } catch (error) {
-    return next(error);
+    return next(
+      new HTTPStatusError("Invalid error: user ID is not number", 501, error)
+    );
   }
 });

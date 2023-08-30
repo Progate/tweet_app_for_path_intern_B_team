@@ -16,6 +16,7 @@ import {dialogMessageMiddleware} from "@/middlewares/dialog_message";
 import {currentUserMiddleware} from "@/middlewares/current_user";
 import {authenticationMiddleware} from "@/middlewares/authentication";
 import {followRouter} from "@/routes/follow";
+import {errHandler} from "@/middlewares/errHandler";
 
 export const loadMiddlewaresForTweetApp = (app: Express): void => {
   loadMethodOverride(app);
@@ -28,6 +29,7 @@ export const loadMiddlewaresForTweetApp = (app: Express): void => {
   loadUser(app);
   loadMessage(app);
   loadRouter(app);
+  loadErrorHandlers(app);
 };
 
 const loadMethodOverride = (app: Express): void => {
@@ -115,4 +117,8 @@ const loadSecureHeaders = (app: Express): void => {
       })
     );
   }
+};
+
+const loadErrorHandlers = (app: Express): void => {
+  app.use(errHandler);
 };
