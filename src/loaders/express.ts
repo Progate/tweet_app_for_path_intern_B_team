@@ -13,7 +13,6 @@ import { postRouter } from "@/routes/post";
 import { likeRouter } from "@/routes/like";
 import { retweetRouter } from "@/routes/retweet";
 import { errRouter } from "@/routes/err";
-import { errHandler } from "@/middlewares/errHandler";
 import { dialogMessageMiddleware } from "@/middlewares/dialog_message";
 import { currentUserMiddleware } from "@/middlewares/current_user";
 import { authenticationMiddleware } from "@/middlewares/authentication";
@@ -30,7 +29,6 @@ export const loadMiddlewaresForTweetApp = (app: Express): void => {
   loadUser(app);
   loadMessage(app);
   loadRouter(app);
-  loadErrorHandlers(app);
 };
 
 const loadMethodOverride = (app: Express): void => {
@@ -119,8 +117,4 @@ const loadSecureHeaders = (app: Express): void => {
       }),
     );
   }
-};
-
-const loadErrorHandlers = (app: Express): void => {
-  app.use(errHandler);
 };

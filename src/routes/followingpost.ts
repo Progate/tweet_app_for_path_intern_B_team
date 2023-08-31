@@ -1,14 +1,15 @@
 import express from "express";
-import {body, validationResult} from "express-validator";
-import {formatDate} from "@/lib/convert_date";
-import {getPost, createPost, updatePost, deletePost} from "@/models/post";
-import {getPostRetweetedCount, hasUserRetweetedPost} from "@/models/retweet";
+import { body, validationResult } from "express-validator";
+import { formatDate } from "@/lib/convert_date";
+import { createPost, deletePost, getPost, updatePost } from "@/models/post";
+import { getPostRetweetedCount, hasUserRetweetedPost } from "@/models/retweet";
 //import {getAllPostTimeline} from "@/models/user_timeline";
-import {getPostLikedCount, hasUserLikedPost} from "@/models/like";
-import {ensureAuthUser} from "@/middlewares/authentication";
-import {ensureOwnerOfPost} from "@/middlewares/current_user";
-import {getAllfollowsPostTimeline} from "@/models/user_timeline";
-import {IsFollow} from "@/models/follow";
+import { getPostLikedCount, hasUserLikedPost } from "@/models/like";
+import { ensureAuthUser } from "@/middlewares/authentication";
+import { ensureOwnerOfPost } from "@/middlewares/current_user";
+import { getAllfollowsPostTimeline } from "@/models/user_timeline";
+import { IsFollow } from "@/models/follow";
+import { checkuint } from "@/models/validation";
 
 export const followingpostRouter = express.Router();
 
@@ -21,7 +22,7 @@ export const followingpostRouter = express.Router();
 
 followingpostRouter.get("/", ensureAuthUser, async (req, res) => {
   const currentUserId = req.authentication?.currentUserId;
-  const {userId} = req.params;
+  const { userId } = req.params;
   const timeline = await getAllfollowsPostTimeline(Number(currentUserId));
   res.render("followingposts/index", {
     timeline,
@@ -38,10 +39,24 @@ followingpostRouter.get("/new", ensureAuthUser, (req, res) => {
 });
 
 followingpostRouter.get("/:postId", ensureAuthUser, async (req, res, next) => {
-  const {postId} = req.params;
+  const { postId } = req.params;
+  const ipostId = checkuint(postId);
+  switch (ipostId) {
+    case -2: {
+      return next(
+        new Error(
+          "Invalid error: userId is not appropriate format'started with zero'",
+        ),
+      );
+    }
+    case -1: {
+      return next(new Error("Invalid error: userId is NaN"));
+    }
+  }
   const post = await getPost(Number(postId));
-  if (!post || !post.id)
+  if (!post || !post.id) {
     return next(new Error("Invalid error: The post or post.id is undefined."));
+  }
 
   const currentUserId = req.authentication?.currentUserId;
   if (currentUserId === undefined) {
@@ -68,7 +83,7 @@ followingpostRouter.post(
   ensureAuthUser,
   body("content", "Content can't be blank").notEmpty(),
   async (req, res, next) => {
-    const {content} = req.body;
+    const { content } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.render("follownigposts/new", {
@@ -85,24 +100,37 @@ followingpostRouter.post(
       // This must not happen.
       return next(new Error("Invalid error: currentUserId is undefined."));
     }
-    await createPost({content, userId: currentUserId});
+    await createPost({ content, userId: currentUserId });
     req.dialogMessage?.setMessage("Post successfully created");
     res.redirect("/followingposts");
-  }
+  },
 );
 
 followingpostRouter.get(
   "/:postId/edit",
   ensureAuthUser,
   ensureOwnerOfPost,
-  async (req, res) => {
-    const {postId} = req.params;
+  async (req, res, next) => {
+    const { postId } = req.params;
+    const ipostId = checkuint(postId);
+    switch (ipostId) {
+      case -2: {
+        return next(
+          new Error(
+            "Invalid error: userId is not appropriate format'started with zero'",
+          ),
+        );
+      }
+      case -1: {
+        return next(new Error("Invalid error: userId is NaN"));
+      }
+    }
     const post = await getPost(Number(postId));
     res.render("followingposts/edit", {
       post,
       errors: [],
     });
-  }
+  },
 );
 
 followingpostRouter.patch(
@@ -110,9 +138,22 @@ followingpostRouter.patch(
   ensureAuthUser,
   ensureOwnerOfPost,
   body("content", "Content can't be blank").notEmpty(),
-  async (req, res) => {
-    const {content} = req.body;
-    const {postId} = req.params;
+  async (req, res, next) => {
+    const { content } = req.body;
+    const { postId } = req.params;
+    const ipostId = checkuint(postId);
+    switch (ipostId) {
+      case -2: {
+        return next(
+          new Error(
+            "Invalid error: userId is not appropriate format'started with zero'",
+          ),
+        );
+      }
+      case -1: {
+        return next(new Error("Invalid error: userId is NaN"));
+      }
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.render("followingposts/edit", {
@@ -125,17 +166,30 @@ followingpostRouter.patch(
     await updatePost(Number(postId), content);
     req.dialogMessage?.setMessage("Post successfully edited");
     res.redirect("/followingposts");
-  }
+  },
 );
 
 followingpostRouter.delete(
   "/:postId",
   ensureAuthUser,
   ensureOwnerOfPost,
-  async (req, res) => {
-    const {postId} = req.params;
+  async (req, res, next) => {
+    const { postId } = req.params;
+    const ipostId = checkuint(postId);
+    switch (ipostId) {
+      case -2: {
+        return next(
+          new Error(
+            "Invalid error: userId is not appropriate format'started with zero'",
+          ),
+        );
+      }
+      case -1: {
+        return next(new Error("Invalid error: userId is NaN"));
+      }
+    }
     await deletePost(Number(postId));
     req.dialogMessage?.setMessage("Post successfully deleted");
     res.redirect("/followingposts");
-  }
+  },
 );

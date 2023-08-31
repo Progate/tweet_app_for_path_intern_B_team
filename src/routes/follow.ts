@@ -1,6 +1,7 @@
 import express from "express";
 import { ensureAuthUser } from "@/middlewares/authentication";
 import { createFollow, deleteFollow } from "@/models/follow";
+import { checkuint } from "@/models/validation";
 
 export const followRouter = express.Router();
 
@@ -14,6 +15,19 @@ export const followRouter = express.Router();
 
 followRouter.post("/:userId", ensureAuthUser, async (req, res, next) => {
   const { userId } = req.params;
+  const iuserId = checkuint(userId);
+  switch (iuserId) {
+    case -2: {
+      return next(
+        new Error(
+          "Invalid error: userId is not appropriate format'started with zero'",
+        ),
+      );
+    }
+    case -1: {
+      return next(new Error("Invalid error: userId is NaN"));
+    }
+  }
   const currentUserId = req.authentication?.currentUserId;
   const prevUrl = req.query.redirect;
   if (currentUserId === undefined) {
