@@ -23,6 +23,11 @@ import {body, validationResult} from "express-validator";
 import {HashPassword} from "@/lib/hash_password";
 import {getUserFollowCount, IsFollow} from "@/models/follow";
 import {checkuint} from "@/models/validation";
+import {
+  getFolloweesWithIsFollowed,
+  getFollowersWithIsFollowed,
+} from "@/models/follow";
+import {getUserFollowCount, IsFollow, UserWithBool} from "@/models/follow";
 
 export const userRouter = express.Router();
 
@@ -85,16 +90,27 @@ userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
     // This must not happen.
     return next(new Error("Invalid error: currentUserId is undefined."));
   }
-  const userTimeline = await getUserPostTimeline(iuserId);
-  const isFollowed = await IsFollow(currentUserId, iuserId);
-  const followCount = await getUserFollowCount(iuserId);
+  const userTimeline = await getUserPostTimeline(Number(userId));
+  const followers: UserWithBool[] = await getFollowersWithIsFollowed(
+    Number(userId),
+    currentUserId
+  );
+  const followees: UserWithBool[] = await getFolloweesWithIsFollowed(
+    Number(userId)
+  );
+  const isFollowed = await IsFollow(currentUserId, Number(userId));
+  const followCount = await getUserFollowCount(Number(userId));
   if (!userTimeline) {
-    return next(new Error("Invalid error: The user is undefined."));
+    if (!userTimeline) {
+      return next(new Error("Invalid error: The user is undefined."));
+    }
   }
   const {user, timeline} = userTimeline;
   res.render("users/show", {
     user,
     timeline,
+    followees,
+    followers,
     followCount,
     isFollowed,
     currentUrl: req.originalUrl,
@@ -117,7 +133,22 @@ userRouter.get("/:userId/likes", ensureAuthUser, async (req, res, next) => {
       );
     }
   }
-  const userTimeline = await getUserLikesTimeline(iuserId);
+  const currentUserId = req.authentication?.currentUserId;
+  if (currentUserId === undefined) {
+    // `ensureAuthUser` enforces `currentUserId` is not undefined.
+    // This must not happen.
+    return next(new Error("Invalid error: currentUserId is undefined."));
+  }
+
+  const followers: UserWithBool[] = await getFollowersWithIsFollowed(
+    Number(userId),
+    currentUserId
+  );
+  const followees: UserWithBool[] = await getFolloweesWithIsFollowed(
+    Number(userId)
+  );
+  const isFollowed = await IsFollow(currentUserId, Number(userId));
+  const followCount = await getUserFollowCount(Number(userId));
   if (!userTimeline) {
     return next(new Error("Invalid error: The user is undefined."));
   }
@@ -125,6 +156,11 @@ userRouter.get("/:userId/likes", ensureAuthUser, async (req, res, next) => {
   res.render("users/likes", {
     user,
     timeline,
+    followees,
+    followers,
+    followCount,
+    isFollowed,
+    currentUrl: req.originalUrl,
   });
 });
 
@@ -163,6 +199,7 @@ const storage = multer.diskStorage({
     cb(null, outFileName);
   },
 });
+
 const upload = multer({
   storage,
   fileFilter: (req, file, cb) => {

@@ -1,0 +1,18 @@
+<div class="ff-list">
+  <% list.foreach(function (user)=> {}%>
+    <div class="ff-list-item">
+      <div class="ff-list-item-icon">
+        <img src="<%=user.imageName %>" data-test="user-image">
+      </div>
+      <div class="ff-list-item-name">
+        <h2 data-test="user-name">
+          <%= user.name %>
+        </h2>
+      </div>
+      <div class="ff-list-item-follow-button">
+        <%- include('../follow', {userId : user.id, isFollowed: isFollowed, currentUrl: currentUrl}); %>
+      </div>
+    </div>
+    <% }); %>
+</div>
+

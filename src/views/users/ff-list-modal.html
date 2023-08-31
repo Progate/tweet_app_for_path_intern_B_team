@@ -1,0 +1,48 @@
+<div class="modal-follow" id="modal-follow">
+  <div class="modal-wrapper">
+    <input type="radio" name="modal-follow" id="modal-close">
+    <input type="radio" name="modal-follow" id="modal-overlay" checked>
+    <input id="follower-tab-button" type="radio" name="modal-follow" class="tab-switch" />
+    <input id="following-tab-button" type="radio" name="modal-follow" class="tab-switch" />
+
+    <a href="#" class="modal-overlay">
+      <label for="modal-overlay" class="modal-overlay">
+        
+      </label>
+    </a>
+    <div class="modal-window">
+      <div class="modal-header">
+        <ul class="modal-header-buttons">
+          
+          
+          <li class="modal-follow-tab modal-follower-tab">
+            <label class="tab-label" for="follower-tab-button">followers</label>
+          </li>
+
+          <li class="modal-follow-tab modal-following-tab">
+            <label class="tab-label" for="following-tab-button">followings</label>
+          </li>
+   
+        
+        </ul>
+        <div class="modal-close">
+          <a href="#" class="modal-close">
+            <label for="modal-close" class="modal-close">
+              
+            </label>
+          </a>
+        </div>
+      </div>
+      <div class="modal-content">
+        <div class="modal-tab-wrap">
+          <div class="tab-content tab-content-follower">
+            <%- include('ff-list-item', {users:followers, currentUrl: currentUrl}); %>
+          </div>
+          <div class="tab-content tab-content-following">
+            <%- include('ff-list-item', {users:followees, currentUrl: currentUrl}); %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
