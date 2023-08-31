@@ -21,6 +21,8 @@ import {
 import {ensureCorrectUser} from "@/middlewares/current_user";
 import {body, validationResult} from "express-validator";
 import {HashPassword} from "@/lib/hash_password";
+import {getUserFollowCount, IsFollow} from "@/models/follow";
+import {checkuint} from "@/models/validation";
 import {
   getFolloweesWithIsFollowed,
   getFollowersWithIsFollowed,
@@ -69,6 +71,19 @@ userRouter.post(
 /** A page to show user details */
 userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
   const {userId} = req.params;
+  const iuserId = checkuint(userId);
+  switch (iuserId) {
+    case -2: {
+      return next(
+        new Error(
+          "Invalid error: userId is not appropriate format'started with zero'"
+        )
+      );
+    }
+    case -1: {
+      return next(new Error("Invalid error: userId is NaN"));
+    }
+  }
   const currentUserId = req.authentication?.currentUserId;
   if (currentUserId === undefined) {
     // `ensureAuthUser` enforces `currentUserId` is not undefined.
@@ -105,13 +120,25 @@ userRouter.get("/:userId", ensureAuthUser, async (req, res, next) => {
 /** A page to list all tweets liked by a user */
 userRouter.get("/:userId/likes", ensureAuthUser, async (req, res, next) => {
   const {userId} = req.params;
+  const iuserId = checkuint(userId);
+  switch (iuserId) {
+    case -1: {
+      return next(new Error("Invalid error: userId is NaN"));
+    }
+    case -2: {
+      return next(
+        new Error(
+          "Invalid error: userId is not appropriate format'started with zero'"
+        )
+      );
+    }
+  }
   const currentUserId = req.authentication?.currentUserId;
   if (currentUserId === undefined) {
     // `ensureAuthUser` enforces `currentUserId` is not undefined.
     // This must not happen.
     return next(new Error("Invalid error: currentUserId is undefined."));
   }
-  const userTimeline = await getUserLikesTimeline(Number(userId));
 
   const followers: UserWithBool[] = await getFollowersWithIsFollowed(
     Number(userId),
@@ -142,9 +169,22 @@ userRouter.get(
   "/:userId/edit",
   ensureAuthUser,
   ensureCorrectUser,
-  async (req, res) => {
+  async (req, res, next) => {
     const {userId} = req.params;
-    const user = await getUser(Number(userId));
+    const iuserId = checkuint(userId);
+    switch (iuserId) {
+      case -2: {
+        return next(
+          new Error(
+            "Invalid error: userId is not appropriate format'started with zero'"
+          )
+        );
+      }
+      case -1: {
+        return next(new Error("Invalid error: userId is NaN"));
+      }
+    }
+    const user = await getUser(iuserId);
     res.render("users/edit", {
       user,
       errors: [],
@@ -211,8 +251,21 @@ userRouter.patch(
   uploadHandler,
   body("name", "Name can't be blank").notEmpty(),
   body("email", "Email can't be blank").notEmpty(),
-  async (req, res) => {
+  async (req, res, next) => {
     const {userId} = req.params;
+    const iuserId = checkuint(userId);
+    switch (iuserId) {
+      case -2: {
+        return next(
+          new Error(
+            "Invalid error: userId is not appropriate format'started with zero'"
+          )
+        );
+      }
+      case -1: {
+        return next(new Error("Invalid error: userId is NaN"));
+      }
+    }
     const {name, email} = req.body;
 
     const errors = validationResult(req);
@@ -230,7 +283,7 @@ userRouter.patch(
         errors: validationErrors,
       });
     }
-    await updateUserProfile(Number(userId), {
+    await updateUserProfile(iuserId, {
       name,
       email,
       imageName: req.file ? req.file.path.replace("public", "") : undefined,
