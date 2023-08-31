@@ -9,10 +9,8 @@ export const runServer = (): void => {
   });
 
   const shutDown = async (): Promise<void> => {
-    console.log("Received kill signal, shutting down gracefully");
     await new DatabaseManager().close();
     server.close(() => {
-      console.log("Closed out remaining connections");
       process.exit(0);
     });
   };
