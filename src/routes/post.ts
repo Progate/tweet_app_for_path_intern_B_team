@@ -1,14 +1,14 @@
 import express from "express";
-import { body, validationResult } from "express-validator";
-import { formatDate } from "@/lib/convert_date";
-import { createPost, deletePost, getPost, updatePost } from "@/models/post";
-import { getPostRetweetedCount, hasUserRetweetedPost } from "@/models/retweet";
-import { getAllPostTimeline } from "@/models/user_timeline";
-import { getPostLikedCount, hasUserLikedPost } from "@/models/like";
-import { ensureAuthUser } from "@/middlewares/authentication";
-import { ensureOwnerOfPost } from "@/middlewares/current_user";
-import { IsFollow } from "@/models/follow";
-import { checkuint } from "@/models/validation";
+import {body, validationResult} from "express-validator";
+import {formatDate} from "@/lib/convert_date";
+import {createPost, deletePost, getPost, updatePost} from "@/models/post";
+import {getPostRetweetedCount, hasUserRetweetedPost} from "@/models/retweet";
+import {getAllPostTimeline} from "@/models/user_timeline";
+import {getPostLikedCount, hasUserLikedPost} from "@/models/like";
+import {ensureAuthUser} from "@/middlewares/authentication";
+import {ensureOwnerOfPost} from "@/middlewares/current_user";
+import {IsFollow} from "@/models/follow";
+import {checkuint} from "@/models/validation";
 export const postRouter = express.Router();
 
 postRouter.get("/", ensureAuthUser, async (req, res) => {
@@ -28,14 +28,14 @@ postRouter.get("/new", ensureAuthUser, (req, res) => {
 });
 
 postRouter.get("/:postId", ensureAuthUser, async (req, res, next) => {
-  const { postId } = req.params;
+  const {postId} = req.params;
   const ipostId = checkuint(postId);
   switch (ipostId) {
     case -2: {
       return next(
         new Error(
-          "Invalid error: userId is not appropriate format'started with zero'",
-        ),
+          "Invalid error: userId is not appropriate format'started with zero'"
+        )
       );
     }
     case -1: {
@@ -75,7 +75,7 @@ postRouter.post(
   ensureAuthUser,
   body("content", "Content can't be blank").notEmpty(),
   async (req, res, next) => {
-    const { content } = req.body;
+    const {content} = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.render("posts/new", {
@@ -92,10 +92,10 @@ postRouter.post(
       // This must not happen.
       return next(new Error("Invalid error: currentUserId is undefined."));
     }
-    await createPost({ content, userId: currentUserId });
+    await createPost({content, userId: currentUserId});
     req.dialogMessage?.setMessage("Post successfully created");
     res.redirect("/posts");
-  },
+  }
 );
 
 postRouter.get(
@@ -103,14 +103,14 @@ postRouter.get(
   ensureAuthUser,
   ensureOwnerOfPost,
   async (req, res, next) => {
-    const { postId } = req.params;
+    const {postId} = req.params;
     const ipostId = checkuint(postId);
     switch (ipostId) {
       case -2: {
         return next(
           new Error(
-            "Invalid error: userId is not appropriate format'started with zero'",
-          ),
+            "Invalid error: userId is not appropriate format'started with zero'"
+          )
         );
       }
       case -1: {
@@ -122,7 +122,7 @@ postRouter.get(
       post,
       errors: [],
     });
-  },
+  }
 );
 
 postRouter.patch(
@@ -131,15 +131,15 @@ postRouter.patch(
   ensureOwnerOfPost,
   body("content", "Content can't be blank").notEmpty(),
   async (req, res, next) => {
-    const { content } = req.body;
-    const { postId } = req.params;
+    const {content} = req.body;
+    const {postId} = req.params;
     const ipostId = checkuint(postId);
     switch (ipostId) {
       case -2: {
         return next(
           new Error(
-            "Invalid error: userId is not appropriate format'started with zero'",
-          ),
+            "Invalid error: userId is not appropriate format'started with zero'"
+          )
         );
       }
       case -1: {
@@ -158,7 +158,7 @@ postRouter.patch(
     await updatePost(Number(postId), content);
     req.dialogMessage?.setMessage("Post successfully edited");
     res.redirect("/posts");
-  },
+  }
 );
 
 postRouter.delete(
@@ -166,14 +166,14 @@ postRouter.delete(
   ensureAuthUser,
   ensureOwnerOfPost,
   async (req, res, next) => {
-    const { postId } = req.params;
+    const {postId} = req.params;
     const ipostId = checkuint(postId);
     switch (ipostId) {
       case -2: {
         return next(
           new Error(
-            "Invalid error: userId is not appropriate format'started with zero'",
-          ),
+            "Invalid error: userId is not appropriate format'started with zero'"
+          )
         );
       }
       case -1: {
@@ -183,5 +183,5 @@ postRouter.delete(
     await deletePost(ipostId);
     req.dialogMessage?.setMessage("Post successfully deleted");
     res.redirect("/posts");
-  },
+  }
 );
